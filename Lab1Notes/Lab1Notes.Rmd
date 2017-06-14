@@ -21,12 +21,13 @@ subtitle: Logistics & R Refresher
     + Should be done using $\textsf{R}$ or $\textsf{R}$ Studio with write up in \LaTeX 
     + Using $\textsf{R}$ Studio with $\textsf{R}$ Markdown is the simplest way to do this (*Please* do not handwrite your homeworks or do them in MS Word)
     + We will use two of Chris's packages extensively: $\textsf{simcf}$ and $\textsf{tile}$
-
+    
+    $\newline$
 * When this course is over, you should be able to do the following (and more) using $\textsf{R}$:
-    + Fit a logistic regression model using both $\textsf{glm}$ and "by hand" using $\textsf{optim}$, extract parameters of interest, and convert the estimates so they can be interpreted in terms of probabilities
+    + Fit a logistic regression model using both $\textsf{glm}$ and "by hand" using $\textsf{optim}$, extract parameters of interest, and interpreted these as probabilities
     + Compute predicted probabilities for counterfactuals values of $\boldsymbol{x}$ and use simulation to find the expected values and confidence intervals of $\hat{\pi}$ across these counterfactuals
-    + Use cross-validation to assess the predictive power of several models and compare these models across a variety of in-sample goodness of fit tests
-    + Fit a variety of bounded and unbounded count models that account for overdispersion 
+    + Use cross-validation to assess the predictive accuracy of several models and also compare these models across a variety of in-sample goodness of fit tests
+    + Fit a variety of bounded and unbounded count models that address for overdispersion 
     + Use one of several algorithms to impute missing data
 $\newline$
 
@@ -142,7 +143,7 @@ $\newline$
 ```{r}
 library(foreign)
 
-setwd("/Users/danielyoo/CSSS-POLS-510-MLE/Lab1")
+setwd("/Users/danielyoo/CSSS-POLS-510-MLE/Lab1Notes")
 
 data<-read.csv("Lab1data.csv", header=T)  
 

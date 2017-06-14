@@ -25,10 +25,10 @@ subtitle: Logistics & R Refresher
 # Logistics
 
 1. When this course is over, you should be able to do the following (and much more) in $\textsf{R}$:
-    + Fit a logistic regression model using both the $\textsf{glm}$ function and "by hand" using $\textsf{optim}$, extract parameters of interest, and convert estimates so they can be interpreted in probabilities
+    + Fit a logistic regression model using both the $\textsf{glm}$ function and "by hand" using $\textsf{optim}$, extract parameters of interest, and interpret these in probabilities
     + Compute predicted probabilities and use simulation to find the expected values and confidence intervals of $\hat{\pi}$ across counterfactuals values of $\boldsymbol{x}$ 
-    + Use cross-validation to assess the predictive accuracy of several models and compare these models across a variety of in-sample goodness of fit tests
-    + Fit a variety of bounded and unbounded count models that account for overdispersion 
+    + Use cross-validation to assess the predictive accuracy of several models and also compare these models across a variety of in-sample goodness of fit tests
+    + Fit a variety of bounded and unbounded count models that address overdispersion 
     + Use one of several algorithms to impute missing data
 $\newline$
 

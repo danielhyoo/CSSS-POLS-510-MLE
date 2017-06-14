@@ -1,5 +1,0 @@
----
-title: "CSSS 510: Lab 1"
-output: html_document
----
-

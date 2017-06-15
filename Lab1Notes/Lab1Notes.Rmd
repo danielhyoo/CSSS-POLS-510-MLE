@@ -1,7 +1,8 @@
 ---
 title: 'CSSS 510: Lab 1'
 output:
-  pdf_document
+  html_document: default
+  pdf_document: default
 date: "2017-9-29"
 subtitle: Logistics & R Refresher
 ---

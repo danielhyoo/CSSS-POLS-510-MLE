@@ -247,6 +247,26 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("bla
 
 10. Separate the simulated betas from the simulated gammas
 
+
+# 4. Fitting the heteroskedastic normal model using ML
+
+2. Write a likelihood function for the heteroskedastic normal model 
+
+Recall:
+
+\begin{equation*}
+\begin{split}
+\mathcal{L}(\boldsymbol{\mu}, \sigma^2|\boldsymbol{y}) &\propto \text{P}(\boldsymbol{y}|\boldsymbol{\mu}, \sigma^{2})\\
+\mathcal{L}(\boldsymbol{\mu}, \sigma^2|\boldsymbol{y}) &= k(\boldsymbol{y})\text{P}(\boldsymbol{y}|\boldsymbol{\mu}, \sigma^{2})\\
+\mathcal{L}(\boldsymbol{\mu}, \sigma^2|\boldsymbol{y}) &= k(\boldsymbol{y})\prod^{n}_{i=1}(2 \pi \sigma^{2})^{-1/2}\text{exp}\bigg(\frac{-(y_{i}-\mu_{i})^2}{2 \sigma^{2}}\bigg)\\
+...\\
+\mathcal{L}(\boldsymbol{\beta}, \sigma^2|\boldsymbol{y}) &= - \frac{1}{2} \sum^{n}_{i=1} \text{log} \sigma^{2} - \frac{1}{2} \sum^{n}_{i=1} \frac{(y_{i}- \boldsymbol{x}_{i}\boldsymbol{\beta})^2}{\sigma^2} \\
+\mathcal{L}(\boldsymbol{\beta}, \gamma|\boldsymbol{y}) &= - \frac{1}{2} \sum^{n}_{i=1} \boldsymbol{z}_{i}\boldsymbol{\gamma} - \frac{1}{2} \sum^{n}_{i=1} \frac{(y_{i}- \boldsymbol{x}_{i}\boldsymbol{\beta})^2}{\text{exp}(\boldsymbol{z}_{i}\boldsymbol{\gamma})}
+\end{split}
+\end{equation*}
+
+
+
 # 4. Fitting the heteroskedastic normal model using ML
 $\newline$
 \scriptsize
@@ -353,7 +373,9 @@ print(ls.aic)
 
 2. Simulate the predicted values and the confidence intervals using simcf $\newline$
 
-3. Plot the results
+3. Plot the results $\newline$
+
+Recall from lecture:
 
 # 5. Simulating predicted values and confidence intervals - Scenario 1
 \scriptsize

@@ -252,7 +252,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("bla
 
 2. Write a likelihood function for the heteroskedastic normal model 
 
-Recall:
+Recall from lecture:
 
 \begin{equation*}
 \begin{split}

@@ -157,7 +157,6 @@ xplot <- cbind(w1range,w1range,w1range) # need to have the same dimension [21,3]
 #pdf("homoYvsW1.pdf")
 
 # matplot is useful for plotting matrices of data
-par(mfrow=c(1,2))
 
 matplot(y=yplot,
         x=xplot,
@@ -169,6 +168,7 @@ matplot(y=yplot,
 #dev.off()
 
 ```
+
 ## Scenario 2: Vary covariate 2
 
 * Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean
@@ -230,6 +230,20 @@ matplot(y=yplot,
 * Simulate the results by drawing from the model’s predictive distribution 
 
 * Separate the simulated betas from the simulated gammas
+
+$\newline$
+Recall from lecture:
+
+\begin{equation*}
+\begin{split}
+\mathcal{L}(\boldsymbol{\mu}, \sigma^2|\boldsymbol{y}) &\propto \text{P}(\boldsymbol{y}|\boldsymbol{\mu}, \sigma^{2})\\
+\mathcal{L}(\boldsymbol{\mu}, \sigma^2|\boldsymbol{y}) &= k(\boldsymbol{y})\text{P}(\boldsymbol{y}|\boldsymbol{\mu}, \sigma^{2})\\
+\mathcal{L}(\boldsymbol{\mu}, \sigma^2|\boldsymbol{y}) &= k(\boldsymbol{y})\prod^{n}_{i=1}(2 \pi \sigma^{2})^{-1/2}\text{exp}\bigg(\frac{-(y_{i}-\mu_{i})^2}{2 \sigma^{2}}\bigg)\\
+...\\
+\mathcal{L}(\boldsymbol{\beta}, \sigma^2|\boldsymbol{y}) &= - \frac{1}{2} \sum^{n}_{i=1} \text{log} \sigma^{2} - \frac{1}{2} \sum^{n}_{i=1} \frac{(y_{i}- \boldsymbol{x}_{i}\boldsymbol{\beta})^2}{\sigma^2} \\
+\mathcal{L}(\boldsymbol{\beta}, \gamma|\boldsymbol{y}) &= - \frac{1}{2} \sum^{n}_{i=1} \boldsymbol{z}_{i}\boldsymbol{\gamma} - \frac{1}{2} \sum^{n}_{i=1} \frac{(y_{i}- \boldsymbol{x}_{i}\boldsymbol{\beta})^2}{\text{exp}(\boldsymbol{z}_{i}\boldsymbol{\gamma})}
+\end{split}
+\end{equation*}
 
 $\newline$
 

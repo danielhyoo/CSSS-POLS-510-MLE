@@ -24,3 +24,6 @@ subtitle: Maximum Likelihood Estimation R
     * Average vs Predicted Plots
     * ROC plots
     * Residual vs Leverage Plots
+
+# 1. Writing a likelihood function for the logistic regression model
+

@@ -102,7 +102,7 @@ plot(y=w1,x=w2)
 
 # 2. Fitting a model using the simulated data
 
-* Assume we don’t know the true value of the parameters and fit a model using least squares (use the lm() function and regress the response variable on the two covariates)
+* Assume we don’t know the true value of the parameters and fit a model using least squares (use the $\textsf{lm}()$ function and regress the response variable on the two covariates)
 
 * Calculate and print the AIC
 
@@ -124,8 +124,11 @@ print(ls.aic)
 
 * Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean
 
-* Calculate the predicted values using the predict() function Plot the predicted values
+* Calculate the predicted values using the $\textsf{predict}()$ function 
 
+* Plot the predicted values
+
+$\newline$
 ```{r}
 
 # Calculate predicted values using predict()
@@ -170,7 +173,9 @@ matplot(y=yplot,
 
 * Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean
 
-* Calculate the predicted values using the predict() function Plot the predicted values
+* Calculate the predicted values using the $\textsf{predict}()$ function 
+
+* Plot the predicted values
 
 $\newline$
 ```{r}
@@ -208,7 +213,9 @@ matplot(y=yplot,
 
 * Create the input matrices (the two covariates)
 
-* Write a likelihood function for the heteroskedastic normal model Find the MLEs using the optim() function
+* Write a likelihood function for the heteroskedastic normal model 
+
+* Find the MLEs using the $\textsf{optim}()$ function
 
 * Extract the point estimates
 
@@ -220,7 +227,9 @@ matplot(y=yplot,
 
 * Compute the AIC
 
-* Simulate the results by drawing from the model’s predictive distribution Separate the simulated betas from the simulated gammas
+* Simulate the results by drawing from the model’s predictive distribution 
+
+* Separate the simulated betas from the simulated gammas
 
 $\newline$
 
@@ -303,7 +312,9 @@ print(ls.aic)
 
 * Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean
 
-* Simulate the predicted values and the confidence intervals using simcf Plot the results
+* Simulate the predicted values and the confidence intervals using $\textsf{simcf}$
+
+* Plot the results
 
 $\newline$
 
@@ -369,7 +380,9 @@ matplot(y=yplot,
 
 * Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean
 
-* Simulate the predicted values and the confidence intervals using simcf Plot the results
+* Simulate the predicted values and the confidence intervals using $\textsf{simcf}$
+
+* Plot the results
 
 $\newline$
 

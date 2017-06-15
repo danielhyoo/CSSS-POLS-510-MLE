@@ -107,7 +107,7 @@ plot(y=w1,x=w2)
 
 # 2. Fitting a model using the simulated data
 
-1. Assume we don’t know the true value of the parameters and fit a model using least squares (use the lm() function and regress the response variable on the two covariates) $\newline$
+1. Assume we don’t know the true value of the parameters and fit a model using least squares (use the $\textsf{lm()}$ function and regress the response variable on the two covariates) $\newline$
 
 2. Calculate and print the AIC
 
@@ -134,7 +134,7 @@ print(ls.aic)
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean $\newline$
 
-2. Calculate the predicted values using the predict() function $\newline$
+2. Calculate the predicted values using the $\textsf{predict()}$ function $\newline$
 
 3. Plot the predicted values
 
@@ -187,7 +187,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
 
-2. Calculate the predicted values using the predict() function $\newline$
+2. Calculate the predicted values using the $\textsf{predict()}$ function $\newline$
 
 3. Plot the predicted values
 
@@ -231,7 +231,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("bla
 
 2. Write a likelihood function for the heteroskedastic normal model 
 
-3. Find the MLEs using the optim() function
+3. Find the MLEs using the $\textsf{optim()}$ function
 
 4. Extract the point estimates
 
@@ -371,7 +371,7 @@ print(ls.aic)
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean $\newline$
 
-2. Simulate the predicted values and the confidence intervals using simcf $\newline$
+2. Simulate the predicted values and the confidence intervals using $\textsf{simcf}$ $\newline$
 
 3. Plot the results $\newline$
 
@@ -444,7 +444,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
 
-2. Simulate the predicted values and the confidence intervals using simcf $\newline$
+2. Simulate the predicted values and the confidence intervals using $\textsf{simcf}$ $\newline$
 
 3. Plot the results
 

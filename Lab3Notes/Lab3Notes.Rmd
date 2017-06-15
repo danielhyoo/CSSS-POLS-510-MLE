@@ -1,0 +1,26 @@
+---
+title: 'CSSS 510: Lab 3'
+output:
+  pdf_document: default
+  html_document: default
+date: '2017-10-13'
+subtitle: Maximum Likelihood Estimation R
+---
+
+# 0. Agenda
+
+1. Writing a likelihood function for the logistic regression model
+
+2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+
+3. Simulating predicted values and confidence intervals 
+
+4. Simulating first differences
+
+5. Model Fitting
+    * Likelihood ratio test
+    * Akaike Information Criterion
+    * Bayesian Information Criterion
+    * Average vs Predicted Plots
+    * ROC plots
+    * Residual vs Leverage Plots

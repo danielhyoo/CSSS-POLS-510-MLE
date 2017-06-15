@@ -334,7 +334,8 @@ ll
 # Fitting the heteroskedastic normal model using ML
 \scriptsize
 ```{r}
-#The AIC is the deviance or -2*ll at its max plus 2*number of parameters or the dimension
+# The AIC is the deviance or -2*ll at its max plus 2*number of 
+# parameters or the dimension
 hetnorm.aic <- 2*length(stval) - 2*ll  
 # first component to penalizing the number of parameters 
 # (i.e., the loss of degree of freedom). Lower aic is better

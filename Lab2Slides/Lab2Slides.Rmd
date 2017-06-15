@@ -135,7 +135,7 @@ print(ls.aic)
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean $\newline$
 
-2. Calculate the predicted values using the predict() function 
+2. Calculate the predicted values using the predict() function $\newline$
 
 3. Plot the predicted values
 
@@ -188,7 +188,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
 
-2. Calculate the predicted values using the predict() function 
+2. Calculate the predicted values using the predict() function $\newline$
 
 3. Plot the predicted values
 
@@ -349,9 +349,9 @@ print(ls.aic)
 
 ## Scenario 1: Vary covariate 1
 
-1. Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean
+1. Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean $\newline$
 
-2. Simulate the predicted values and the confidence intervals using simcf 
+2. Simulate the predicted values and the confidence intervals using simcf $\newline$
 
 3. Plot the results
 
@@ -420,9 +420,9 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 
 # Simulating predicted values and confidence intervals - Scenario 2: Vary covariate 2
 
-1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean
+1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
 
-2. Simulate the predicted values and the confidence intervals using simcf 
+2. Simulate the predicted values and the confidence intervals using simcf $\newline$
 
 3. Plot the results
 

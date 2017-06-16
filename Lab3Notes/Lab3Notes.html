@@ -117,7 +117,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">CSSS 510: Lab 3</h1>
-<h3 class="subtitle"><em>Maximum Likelihood Estimation R</em></h3>
+<h3 class="subtitle"><em>Logistic Regression in R</em></h3>
 <h4 class="date"><em>2017-10-13</em></h4>
 
 </div>
@@ -126,12 +126,46 @@ $(document).ready(function () {
 <div id="agenda" class="section level1">
 <h1>0. Agenda</h1>
 <ol style="list-style-type: decimal">
-<li><p>Simulating heteroskedastic normal data</p></li>
-<li><p>Fitting a model using the simulated data</p></li>
-<li><p>Calculating predicted values</p></li>
-<li><p>Fitting the heteroskedastic normal model using ML</p></li>
+<li><p>Deriving a likelihood function for the logistic regression model</p></li>
+<li><p>Fitting a logit model using <span class="math inline">\(\textsf{optim}()\)</span> and <span class="math inline">\(\textsf{glm}()\)</span></p></li>
 <li><p>Simulating predicted values and confidence intervals</p></li>
+<li><p>Simulating first differences</p></li>
+<li>Model Fitting
+<ul>
+<li>Likelihood ratio test</li>
+<li>Akaike Information Criterion</li>
+<li>Bayesian Information Criterion</li>
+<li>Average vs Predicted Plots</li>
+<li>ROC plots</li>
+<li>Residual vs Leverage Plots</li>
+</ul></li>
 </ol>
+</div>
+<div id="deriving-a-likelihood-function-for-the-logistic-regression-model" class="section level1">
+<h1>1. Deriving a likelihood function for the logistic regression model</h1>
+<p>Recall from lecture the logit model:</p>
+<span class="math display">\[\begin{equation*}
+\begin{split}
+y_{i} &amp;\sim \text{Bern}(y_{i}|\pi_{i}) \\
+\pi_{i} &amp;= \text{logit}^{-1}(\boldsymbol{x}_{i}\boldsymbol{\beta})\\
+\pi_{i} &amp;= \frac{\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})}{1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})} = \frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}
+\end{split}
+\end{equation*}\]</span>
+<p>Recall also that the Bernoulli has the following pdf:</p>
+<span class="math display">\[\begin{equation*}
+\begin{split}
+\text{Pr}(y_{i}=1|\pi_{i}) &amp;= \pi_{i}^{y_{i}}(1 - \pi_{i})^{1-y_{i}}
+\end{split}
+\end{equation*}\]</span>
+<p>And the likelihood function can be derived from the joint probability:</p>
+<span class="math display">\[\begin{equation*}
+\begin{split}
+\mathcal{L}(\boldsymbol{\pi}|\boldsymbol{y}) &amp;\propto \prod^{n}_{i=1}\pi_{i}^{y_{i}}(1-\pi_{i})^{1-y_{i}}\\
+\mathcal{L}(\boldsymbol{\beta}|\boldsymbol{y}) &amp;\propto \prod^{n}_{i=1}\bigg(\frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}\bigg)^{y_i}\bigg(1-\frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}\bigg)^{1-y_i}\\
+\mathcal{L}(\boldsymbol{\beta}|\boldsymbol{y}) &amp;\propto \prod^{n}_{i=1}(1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta}))^{-y_{i}}(1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta}))^{-(1-y_{i})}\\
+\text{log}\mathcal{L}(\boldsymbol{\beta}|\boldsymbol{y}) &amp;\propto \sum^{n}_{i=1} -y_{i}\text{log} (1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta}))-(1-y_{i})\text{log}(1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta}))
+\end{split}
+\end{equation*}\]</span>
 </div>
 
 

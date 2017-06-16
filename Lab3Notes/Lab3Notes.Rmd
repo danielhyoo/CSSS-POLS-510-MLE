@@ -4,12 +4,12 @@ output:
   pdf_document: default
   html_document: default
 date: '2017-10-13'
-subtitle: Maximum Likelihood Estimation R
+subtitle: Logistic Regression
 ---
 
 # 0. Agenda
 
-1. Writing a likelihood function for the logistic regression model
+1. Deriving a likelihood function for the logistic regression model
 
 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
 
@@ -17,7 +17,7 @@ subtitle: Maximum Likelihood Estimation R
 
 4. Simulating first differences
 
-5. Model Fitting
+5. Assessing model fit
     * Likelihood ratio test
     * Akaike Information Criterion
     * Bayesian Information Criterion
@@ -25,5 +25,111 @@ subtitle: Maximum Likelihood Estimation R
     * ROC plots
     * Residual vs Leverage Plots
 
-# 1. Writing a likelihood function for the logistic regression model
+# 1. Deriving a likelihood function for the logistic regression model
 
+Recall from lecture the logit model:
+
+\begin{equation*}
+\begin{split}
+y_{i} &\sim \text{Bern}(y_{i}|\pi_{i}) \\
+\pi_{i} &= \text{logit}^{-1}(\boldsymbol{x}_{i}\boldsymbol{\beta})\\
+\pi_{i} &= \frac{\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})}{1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})} = \frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}
+\end{split}
+\end{equation*}
+
+In the simple case, this stems from the latent variable model:
+
+$$y^* = \beta_{0} + \beta_{1}x + \epsilon$$
+
+where the relationship between latent variable $y^*$ and the explanatory variable $x$ is modeled using simple linear regression, and the binary outcome $y$ is a function of the sign of $y^*$:
+
+\begin{equation}
+  y=\begin{cases}
+    1, & \text{if $y^*>0$}\\
+    0, & \text{if $y^*\leq0$}
+  \end{cases}
+\end{equation}
+
+```{r echo = F}
+library(knitr)
+opts_chunk$set(fig.lp = '')
+```
+
+\centering
+\includegraphics{Fig1.pdf}
+
+\flushleft
+
+The logistic regression model is obtained if we assume the errors of this latent variable model follow a standard logistic distribution. Recall that the pdf and cdf of the standard logisitic distribution are as follows:
+
+$$f(t) = \frac{\text{exp}(t)}{(1 + \text{exp}(t))^2}$$
+$$F(t) = \frac{\text{exp}(t)}{1+\text{exp}(t)}$$
+
+We therefore have the following:
+\begin{equation*}
+\begin{split}
+\text{Pr}(y=1|x) &= \text{Pr}(y^*>0|x)\\
+&= \text{Pr}(\beta_{0} + \beta_{1}x + \epsilon>0|x)\\
+&= \text{Pr}(\epsilon > -(\beta_{0} + \beta_{1}x))\\
+&= \text{Pr}(\epsilon < \beta_{0} + \beta_{1}x)\\
+&= F(\beta_{0}^{L}+\beta_{1}^{L}x)
+\end{split}
+\end{equation*}
+
+\centering
+\includegraphics{Fig2.pdf}
+\includegraphics{Fig3.pdf}
+\flushleft
+
+
+Since we assume the errors follow a standard logistic distribution, we have 
+
+$$\text{Pr}(y=1|x)=F(\beta_{0}^{L}+\beta_{1}^{L}x)=\frac{\text{exp}(\beta^L_0+\beta^L_1x)}{1+\text{exp}(\beta^L_0+\beta^L_1x)}$$
+and E$(\epsilon)$=0 and Var$(\epsilon)=\frac{\pi^2}{3}$.
+
+\centering
+\includegraphics{Fig4.pdf}
+\flushleft
+
+
+The logit function is the inverse of the logistic function:
+
+$$\text{logit}(p)=\text{log}\frac{p}{1-p}$$
+or
+$$\text{logit}^{-1}(p)=\frac{\text{exp}(x)}{1+\text{exp}(x)}$$
+We therefore have the following
+$$\text{Pr}(y=1|x)=\text{logit}^{-1}(\beta_{1}^{L}+\beta_{1}^{L}x)$$
+or
+$$\text{logit}(\text{Pr}(y=1|x))=\beta_{1}^{L}+\beta_{1}^{L}x$$
+or
+$$\text{log}\frac{\text{Pr}(y=1|x)}{\text{Pr}(y=0|x)}=\beta_{0}^{L}+\beta_{1}^{L}x.$$
+$\newline$
+
+Recall from lecture that a Bernoulli distribution has the following pdf:
+
+\begin{equation*}
+\begin{split}
+\text{Pr}(y_{i}=1|\pi_{i}) &= \pi_{i}^{y_{i}}(1 - \pi_{i})^{1-y_{i}}
+\end{split}
+\end{equation*}
+
+And the likelihood function can be derived from the joint probability:
+
+\begin{equation*}
+\begin{split}
+\mathcal{L}(\boldsymbol{\pi}|\boldsymbol{y}) &\propto \prod^{n}_{i=1}\pi_{i}^{y_{i}}(1-\pi_{i})^{1-y_{i}}\\
+\mathcal{L}(\boldsymbol{\beta}|\boldsymbol{y}) &\propto \prod^{n}_{i=1}\bigg(\frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}\bigg)^{y_i}\bigg(1-\frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}\bigg)^{1-y_i}\\
+\mathcal{L}(\boldsymbol{\beta}|\boldsymbol{y}) &\propto \prod^{n}_{i=1}(1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta}))^{-y_{i}}(1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta}))^{-(1-y_{i})}\\
+\text{log}\mathcal{L}(\boldsymbol{\beta}|\boldsymbol{y}) &\propto \sum^{n}_{i=1} -y_{i}\text{log} (1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta}))-(1-y_{i})\text{log}(1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta}))
+\end{split}
+\end{equation*}
+
+
+
+# 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+
+# 3. Simulating predicted values and confidence intervals 
+
+# 4. Simulating first differences
+
+# 5. Assessing model fit

@@ -1,19 +1,18 @@
 ---
 title: 'CSSS 510: Lab 3'
 output:
-  pdf_document: default
-  html_document: default
+  beamer_presentation
 date: '2017-10-13'
 subtitle: Logistic Regression
 ---
 
 # 0. Agenda
 
-1. Deriving a likelihood function for the logistic regression model
+1. Deriving a likelihood function for the logistic regression model $\newline$
 
-2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$ $\newline$
 
-3. Simulating predicted values and confidence intervals 
+3. Simulating predicted values and confidence intervals $\newline$
 
 4. Simulating first differences
 
@@ -21,13 +20,13 @@ subtitle: Logistic Regression
 
 Recall from lecture the logit model:
 
-\begin{equation*}
-\begin{split}
-y_{i} &\sim \text{Bern}(y_{i}|\pi_{i}) \\
-\pi_{i} &= \text{logit}^{-1}(\boldsymbol{x}_{i}\boldsymbol{\beta})\\
-\pi_{i} &= \frac{\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})}{1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})} = \frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}
-\end{split}
-\end{equation*}
+$$y_{i} \sim \text{Bern}(y_{i}|\pi_{i})$$
+
+$$\pi_{i} = \text{logit}^{-1}(\boldsymbol{x}_{i}\boldsymbol{\beta})$$
+
+$$\pi_{i} = \frac{\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})}{1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})} = \frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}$$
+
+# 1. Deriving a likelihood function for the logistic regression model
 
 In the simple case, this stems from the latent variable model:
 
@@ -35,27 +34,33 @@ $$y^* = \beta_{0} + \beta_{1}x + \epsilon$$
 
 where the relationship between latent variable $y^*$ and the explanatory variable $x$ is modeled using simple linear regression, and the binary outcome $y$ is a function of the sign of $y^*$:
 
-\begin{equation}
+\begin{equation*}
   y=\begin{cases}
     1, & \text{if $y^*>0$}\\
     0, & \text{if $y^*\leq0$}
   \end{cases}
-\end{equation}
+\end{equation*}
 
+# 1. Deriving a likelihood function for the logistic regression model
 ```{r echo = F}
 library(knitr)
 opts_chunk$set(fig.lp = '')
 ```
-
 \centering
 \includegraphics{Fig1.pdf}
 
-\flushleft
 
-The logistic regression model is obtained if we assume the errors of this latent variable model follow a standard logistic distribution. Recall that the pdf and cdf of the standard logisitic distribution are as follows:
+# 1. Deriving a likelihood function for the logistic regression model
+
+The logistic regression model is obtained if we assume the errors of this latent variable model follow a standard logistic distribution.
+
+Recall that the pdf and cdf of the standard logisitic distribution are as follows:
 
 $$f(t) = \frac{\text{exp}(t)}{(1 + \text{exp}(t))^2}$$
+$\newline$
 $$F(t) = \frac{\text{exp}(t)}{1+\text{exp}(t)}$$
+
+# 1. Deriving a likelihood function for the logistic regression model
 
 We therefore have the following:
 \begin{equation*}
@@ -68,28 +73,43 @@ We therefore have the following:
 \end{split}
 \end{equation*}
 
+# 1. Deriving a likelihood function for the logistic regression model
+
 \centering
 \includegraphics{Fig2.pdf}
+
+# 1. Deriving a likelihood function for the logistic regression model
+\centering
 \includegraphics{Fig3.pdf}
-\flushleft
 
+# 1. Deriving a likelihood function for the logistic regression model
 
+\begin{columns}
+  \column{0.5\linewidth}
 Since we assume the errors follow a standard logistic distribution, we have 
 
-$$\text{Pr}(y=1|x)=F(\beta_{0}^{L}+\beta_{1}^{L}x)=\frac{\text{exp}(\beta^L_0+\beta^L_1x)}{1+\text{exp}(\beta^L_0+\beta^L_1x)}$$
-and E$(\epsilon)$=0 and Var$(\epsilon)=\frac{\pi^2}{3}$.
-
+$\newline$
+$$\text{Pr}(y=1|x)=F(\beta_{0}^{L}+\beta_{1}^{L}x)$$
+$$=\frac{\text{exp}(\beta^L_0+\beta^L_1x)}{1+\text{exp}(\beta^L_0+\beta^L_1x)}$$
+$\newline$
+$\newline$
 \centering
+E$(\epsilon)$=0 and Var$(\epsilon)=\frac{\pi^2}{3}$.
+\column{0.5\linewidth}
 \includegraphics{Fig4.pdf}
-\flushleft
+\end{columns}
 
-
+# 1. Deriving a likelihood function for the logistic regression model
+\small
+$\newline$
 The logit function is the inverse of the logistic function:
 
 $$\text{logit}(p)=\text{log}\frac{p}{1-p}$$
 or
 $$\text{logit}^{-1}(p)=\frac{\text{exp}(x)}{1+\text{exp}(x)}$$
+
 We therefore have the following
+
 $$\text{Pr}(y=1|x)=\text{logit}^{-1}(\beta_{1}^{L}+\beta_{1}^{L}x)$$
 or
 $$\text{logit}(\text{Pr}(y=1|x))=\beta_{1}^{L}+\beta_{1}^{L}x$$
@@ -97,16 +117,15 @@ or
 $$\text{log}\frac{\text{Pr}(y=1|x)}{\text{Pr}(y=0|x)}=\beta_{0}^{L}+\beta_{1}^{L}x.$$
 $\newline$
 
-Recall from lecture that a Bernoulli distribution has the following pdf:
-
+# 1. Deriving a likelihood function for the logistic regression model
+\small
+Recall from lecture that the Bernoulli distribution has the following pdf:
 \begin{equation*}
 \begin{split}
 \text{Pr}(y_{i}=1|\pi_{i}) &= \pi_{i}^{y_{i}}(1 - \pi_{i})^{1-y_{i}}
 \end{split}
 \end{equation*}
-
 And the likelihood function can be derived from the joint probability:
-
 \begin{equation*}
 \begin{split}
 \mathcal{L}(\boldsymbol{\pi}|\boldsymbol{y}) &\propto \prod^{n}_{i=1}\pi_{i}^{y_{i}}(1-\pi_{i})^{1-y_{i}}\\
@@ -117,7 +136,7 @@ And the likelihood function can be derived from the joint probability:
 \end{equation*}
 
 # 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
-
+\scriptsize
 ```{r}
 
 rm(list = ls()) # clear up the memory
@@ -127,7 +146,8 @@ rm(list = ls()) # clear up the memory
 library(MASS)
 library(RColorBrewer)
 
-#download simcf and tile packages from- http://faculty.washington.edu/cadolph/software
+# download simcf and tile packages 
+# from- http://faculty.washington.edu/cadolph/software
 # don't unzip the archive (tar) file 
 library(simcf)
 library(tile)
@@ -135,8 +155,12 @@ library(tile)
 # Load data
 file <- "nes00a.csv"
 data <- read.csv(file, header=TRUE)
-
 # attach(data)  
+```
+
+# 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+\scriptsize
+```{r}
 
 # Estimate logit model using optim()
 # Construct variables and model objects
@@ -155,12 +179,16 @@ llk.logit <- function(param,y,x) {
   # (based on our choice of standard logistic cdf as the systematic component)
                # optim is a minimizer, so use -lnL here
 }
+```
 
+# 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+\scriptsize
+```{r}
 # Fit logit model using optim
 ls.result <- lm(y~x)  # use ls estimates as starting values (for convenience)
 stval <- ls.result$coefficients  # initial guesses
 logit.result.opt <- optim(stval,llk.logit,method="BFGS",hessian=T,y=y,x=x)
-                   # call minimizer procedure or max by adding control=list(fnscale=-1)
+# call minimizer procedure or max by adding control=list(fnscale=-1)
 pe.opt <- logit.result.opt$par   # point estimates
 vc.opt <- solve(logit.result.opt$hessian)  # var-cov matrix
 se.opt <- sqrt(diag(vc.opt))    # standard errors
@@ -170,9 +198,14 @@ logit.optim<-data.frame(cbind(round(pe.opt,3), round(se.opt,3)))
 rownames(logit.optim)<-c("intercept", "age", "highschool" , "college")
 colnames(logit.optim)<-c("pe", "std.err")
 logit.optim
+```
 
+# 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+\scriptsize
+```{r}
 #p-value based on t-statistics
-2*pt(abs(logit.optim$pe/logit.optim$std.err), df=length(y)-length(pe.opt) , lower.tail = FALSE)
+2*pt(abs(logit.optim$pe/logit.optim$std.err), 
+     df=length(y)-length(pe.opt) , lower.tail = FALSE)
 
 # Estimate logit model using glm()
 
@@ -181,20 +214,28 @@ logit.optim
 # called iteratively re-weighted least squares (IRWLS).
 
 logit.result <- glm(vote00~age +hsdeg+coldeg, family=binomial, data=data) 
-# family "binomial" calls logit transformation (log(pi/1-pi)) as a "link function" 
+# family "binomial" calls logit transformation 
+# (log(pi/1-pi)) as a "link function" 
 # corresponding to logistic distribution. 
 # Link function transforms pi so that it follows a linear model. 
 # (So although pi itself is dependent on covariates in a non-linear way, 
 # logit transformed pi is dependent on covariates in a linear way.) 
+```
 
+# 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+\tiny
+```{r}
 summary(logit.result)
+```
 
+# 2. Fitting a logit model using $\textsf{optim}()$ and $\textsf{glm}()$
+\scriptsize
+```{r}
 # now a new model adding age^2
 model <- vote00 ~ age + I(age^2) + hsdeg + coldeg
 mdata <- extractdata(model, data, na.rm=TRUE) # needs library(simcf)
 
 logit.result <- glm(model, family=binomial, data=mdata) 
-summary(logit.result)
 
 pe <- logit.result$coefficients  # point estimates
 vc <- vcov(logit.result)         # var-cov matrix
@@ -204,62 +245,82 @@ sqrt(diag(vc))
 ```
 
 # 3. Simulating predicted values and confidence intervals 
-
+\scriptsize
 ```{r}
-
 # Simulate parameter distributions
 sims <- 10000
-simbetas <- mvrnorm(sims, pe, vc) #needs library(MASS) # draw 10000 sets of simulated 
+simbetas <- mvrnorm(sims, pe, vc) #needs library(MASS) 
+# draw 10000 sets of simulated 
 # parameter (beta) estimates from a multivariate normal distribution with 
 # mean pe and variance-covariance vc
 
-# Now let's plan counterfactuals: We will have three sets of counterfactuals based 
-# on education lavel (less than hs edu, hs edu, college or higher edu), and for each set 
+# Now let's plan counterfactuals: We will have three 
+# sets of counterfactuals based on education lavel 
+# (less than hs edu, hs edu, college or higher edu), and for each set 
 # we will make age varies between 18 years old and 97 years old. 
 
 # Set up counterfactuals:  all ages, each of three educations
 xhyp <- seq(18,97,1)  # create age vector 
-nscen <- length(xhyp)  # we will have total 80 different age scenarios for each education level
+nscen <- length(xhyp)  # we will have total 80 different age scenarios 
+#for each education level
 
-nohsScen <- hsScen <- collScen <- cfMake(model, mdata, nscen)  #this is just to initialize 
-# 80 scenarios for each education level. As default, all covariate values are set at the mean.
+nohsScen <- hsScen <- collScen <- cfMake(model, mdata, nscen)  
+#this is just to initialize 80 scenarios for each education level. 
+#As default, all covariate values are set at the mean.
+```
 
+# 3. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
 # Create three sets of education counterfactuals
-
 
 for (i in 1:nscen) {
   # No High school scenarios (loop over each age, total 80 scenarios)
   nohsScen <- cfChange(nohsScen, "age", x = xhyp[i], scen = i)
-  nohsScen <- cfChange(nohsScen, "hsdeg", x = 0, scen = i) # no hs degree
-  nohsScen <- cfChange(nohsScen, "coldeg", x = 0, scen = i) # no college degree
+  nohsScen <- cfChange(nohsScen, "hsdeg", x = 0, scen = i)#no hs degree
+  nohsScen <- cfChange(nohsScen, "coldeg", x = 0, scen = i)#no college degree
 
   # HS grad scenarios (loop over each age, total 80 scenarios)
   hsScen <- cfChange(hsScen, "age", x = xhyp[i], scen = i)
-  hsScen <- cfChange(hsScen, "hsdeg", x = 1, scen = i) # has hs degree
-  hsScen <- cfChange(hsScen, "coldeg", x = 0, scen = i)  # no college degree
+  hsScen <- cfChange(hsScen, "hsdeg", x = 1, scen = i)#has hs degree
+  hsScen <- cfChange(hsScen, "coldeg", x = 0, scen = i)#no college degree
 
   # College grad scenarios (loop over each age, total 80 scenarios)
   collScen <- cfChange(collScen, "age", x = xhyp[i], scen = i)
-  collScen <- cfChange(collScen, "hsdeg", x = 1, scen = i) # has hs degree
-  collScen <- cfChange(collScen, "coldeg", x = 1, scen = i) # has college degree
+  collScen <- cfChange(collScen, "hsdeg", x = 1, scen = i)#has hs degree
+  collScen <- cfChange(collScen, "coldeg", x = 1, scen = i)#has college degree
 }
+```
 
-# # Now given the counterfactual covariates (nohsScen/hsScen/collScen) and simulated 
-# parameters (simbetas), we can calculate expected value of the response. 
-# In this case, expected probability of voting!
+# 3. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
+# Now given the counterfactual covariates (nohsScen/hsScen/collScen) 
+# and simulated parameters (simbetas), we can calculate expected value 
+# of the response. In this case, expected probability of voting!
 
 head(nohsScen$x) #we will fit the counterfactual data
 nohsScen$model # in the model specification
-nohsSims <- logitsimev(nohsScen, simbetas, ci=0.95) # using simulated betas to get expected values. 
+```
+
+# 3. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
+nohsSims <- logitsimev(nohsScen, simbetas, ci=0.95) # using simulated 
+# betas to get expected values. 
 # Built-in function "logitsimev" calculates the expected value 
 # for every individual scenario you created.
-
-nohsSims #reports lower and upper confidence intervals as well as expected probabilities
+# reports lower and upper confidence intervals 
+# as well as expected probabilities
 
 # same thing for two other sets of sceneraios
 hsSims <- logitsimev(hsScen, simbetas, ci=0.95)
 collSims <- logitsimev(collScen, simbetas, ci=0.95)
+```
 
+# 3. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
 # Get 3 nice colors for traces
 col <- brewer.pal(3,"Dark2")
 
@@ -269,56 +330,64 @@ col <- brewer.pal(3,"Dark2")
 
 # no hs 
 nohsTrace <- lineplot(x=xhyp, # age on x-axis
-                      y=nohsSims$pe, #expected probability on y-axis
-                      lower=nohsSims$lower, # lower confidence interval
-                      upper=nohsSims$upper, #upper confidence interval
-                      col=col[1], #color choice 
-                      extrapolate=list(data=mdata[,2:ncol(mdata)], 
-                                       #actual covariates (i.e., values in your data)
-                               cfact=nohsScen$x[,2:ncol(hsScen$x)],#counterfactual covariates
-                        omit.extrapolated=FALSE), #don't show extrapolated values 
-                      plot=1)
+  y=nohsSims$pe, #expected probability on y-axis
+  lower=nohsSims$lower, # lower confidence interval
+  upper=nohsSims$upper, #upper confidence interval
+  col=col[1], #color choice 
+  extrapolate=list(data=mdata[,2:ncol(mdata)], 
+  #actual covariates (i.e., values in your data)
+  cfact=nohsScen$x[,2:ncol(hsScen$x)],#counterfactual covariates
+  omit.extrapolated=FALSE), #don't show extrapolated values 
+  plot=1)
+```
 
+# 3. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
 # hs but no college
 hsTrace <- lineplot(x=xhyp,
-                    y=hsSims$pe,
-                    lower=hsSims$lower,
-                    upper=hsSims$upper,
-                    col=col[2],
-                    extrapolate=list(data=mdata[,2:ncol(mdata)],
-                                       cfact=hsScen$x[,2:ncol(hsScen$x)],
-                                       omit.extrapolated=FALSE),
-                    plot=1)
+  y=hsSims$pe,
+  lower=hsSims$lower,
+  upper=hsSims$upper,
+  col=col[2],
+  extrapolate=list(data=mdata[,2:ncol(mdata)],
+  cfact=hsScen$x[,2:ncol(hsScen$x)],
+  omit.extrapolated=FALSE),
+  plot=1)
 
 #college 
 collTrace <- lineplot(x=xhyp,
-                      y=collSims$pe,
-                      lower=collSims$lower,
-                      upper=collSims$upper,
-                      col=col[3],
-                      extrapolate=list(data=mdata[,2:ncol(mdata)],
-                                       cfact=collScen$x[,2:ncol(hsScen$x)],
-                                       omit.extrapolated=FALSE),
-                      plot=1)
+  y=collSims$pe,
+  lower=collSims$lower,
+  upper=collSims$upper,
+  col=col[3],
+  extrapolate=list(data=mdata[,2:ncol(mdata)],
+  cfact=collScen$x[,2:ncol(hsScen$x)],
+  omit.extrapolated=FALSE),
+  plot=1)
+```
 
+# 3. Simulating predicted values and confidence intervals 
+\tiny
+$\newline$
+```{r}
 # Set up traces with labels
-
 labelTrace <- textTile(labels=c("Less than HS", "High School", "College"),
-                       x=c( 55,    49,     30),
-                       y=c( 0.26,  0.56,   0.87),
-                       col=col,
-                       plot=1)
+    x=c( 55,    49,     30),
+    y=c( 0.26,  0.56,   0.87),
+    col=col,
+    plot=1)
+
 
 # For legend
-
-legendTrace <- textTile(labels=c("Logit estimates:", "95% confidence", "interval is shaded"),
-                        x=c(82, 82, 82),
-                        y=c(0.2, 0.16, 0.12),
-                        plot=1)
+legendTrace <- 
+  textTile(labels=c("Logit estimates:", "95% confidence", "interval is shaded"),
+  x=c(82, 82, 82),
+  y=c(0.2, 0.16, 0.12),
+  plot=1)
 
 
 #options(device="quartz")
-
 # Plot traces using tile
 voting<-tile(nohsTrace,
      hsTrace,
@@ -331,30 +400,28 @@ voting<-tile(nohsTrace,
      xaxistitle=list(labels="Age of Respondent"),
      yaxistitle=list(labels="Probability of Voting"),
      width=list(null=5,yaxistitle=4,yaxis.labelspace=-0.5)
-     #,output=list(file="educationEV",width=5.5)
+     ,output=list(file="educationEV",width=5.5)
 )
-
 ```
 
-# 4. Simulating first differences
+# 3. Simulating predicted values and confidence intervals 
 
+\centering
+\includegraphics{educationEV.pdf}
+
+
+# 4. Simulating first differences
+\scriptsize
 
 ```{r}
-
-
-
 ################################################################
 #
 # Now consider a new specification adding the variable
 # "ever married", or marriedo
-#
 # We will estimate this new model with glm(), then
 # simulate new scenarios for marrieds and non-marrieds
 
-
 # Estimate logit model using glm()
-
-
 # Set up a new model formula and model specific data frame
 
 model2 <- vote00 ~ age + I(age^2) + hsdeg + coldeg + marriedo
@@ -365,14 +432,16 @@ logit.m2 <- glm(model2, family=binomial, data=mdata2)
 pe.m2 <- logit.m2$coefficients  # point estimates
 vc.m2 <- vcov(logit.m2)         # var-cov matrix
 
-
 # Simulate parameter distributions
 sims <- 10000
 simbetas.m2 <- mvrnorm(sims, pe.m2, vc.m2)
+```
 
 
+# 4. Simulating first differences
+\tiny
+```{r}
 # Set up counterfactuals:  all ages
-
 xhyp <- seq(18,97,1)
 nscen <- length(xhyp)
 marriedScen <- notmarrScen <- cfMake(model2, mdata2, nscen)
@@ -401,8 +470,12 @@ marriedFD <- logitsimfd(marriedScen, simbetas.m2, ci=0.95)
 
 # Simulate relative risk of voting wrt marriage: E(y|married)/E(y|notmarried)
 marriedRR <- logitsimrr(marriedScen, simbetas.m2, ci=0.95) 
+```
 
-
+# 4. Simulating first differences
+\tiny
+$\newline$
+```{r}
 ## Make plots using tile
 
 # Get 3 nice colors for traces
@@ -429,8 +502,12 @@ notmarrTrace <- lineplot(x=xhyp,
                                           cfact=notmarrScen$x[,2:ncol(notmarrScen$x)],
                                           omit.extrapolated=TRUE),
                          plot=1)
+```
 
-
+# 4. Simulating first differences
+\tiny
+$\newline$
+```{r}
 # Set up traces with labels and legend
 labelTrace <- textTile(labels=c("Currently Married", "Not Married"),
                        x=c( 35,    53),
@@ -438,11 +515,16 @@ labelTrace <- textTile(labels=c("Currently Married", "Not Married"),
                        col=col,
                        plot=1)
 
+
+
+
 legendTrace <- textTile(labels=c("Logit estimates:", "95% confidence", "interval is shaded"),
                         x=c(80, 80, 80),
                         y=c(0.2, 0.15, 0.10),
                         cex=0.9,
                         plot=1)
+
+
 
 # Plot traces using tile
 tile(marriedTrace,
@@ -457,11 +539,20 @@ tile(marriedTrace,
      width=list(null=5,yaxistitle=4,yaxis.labelspace=-0.5)
      #,output=list(file="marriedEV",width=5.5)
 )
+```
+
+# 4. Simulating first differences
+\scriptsize
+\centering
+\includegraphics{marriedEV.pdf}
 
 
 
+# 4. Simulating first differences
+\tiny
+$\newline$
+```{r}
 # Plot First Difference
-
 # Set up lineplot trace of first difference
 
 marriedFDTrace <- lineplot(x=xhyp,
@@ -480,6 +571,12 @@ baseline <- linesTile(x=c(18,94),
                       y=c(0,0),
                       plot=1)
 
+```
+
+# 4. Simulating first differences
+\tiny
+$\newline$
+```{r}
 # Set up traces with labels and legend
 labelFDTrace <- textTile(labels=c("Married compared \n to Not Married"),
                          x=c( 40),
@@ -487,11 +584,16 @@ labelFDTrace <- textTile(labels=c("Married compared \n to Not Married"),
                          col=col[1],
                          plot=1)
 
+
+
+
 legendFDTrace <- textTile(labels=c("Logit estimates:", "95% confidence", "interval is shaded"),
                           x=c(80, 80, 80),
                           y=c(-0.02, -0.05, -0.08),
                           cex=0.9,
                           plot=1)
+
+
 
 # Plot traces using tile
 tile(marriedFDTrace,
@@ -506,8 +608,18 @@ tile(marriedFDTrace,
      width=list(null=5,yaxistitle=4,yaxis.labelspace=-0.5)
      #,output=list(file="marriedFD",width=5.5)
 )
+```
+
+# 4. Simulating first differences
+\scriptsize
+\centering
+\includegraphics{marriedFD.pdf}
 
 
+# 4. Simulating first differences
+\tiny
+$\newline$
+```{r}
 # Plot Relative Risk
 
 # Set up lineplot trace of relative risk
@@ -528,6 +640,12 @@ baseline <- linesTile(x=c(18,94),
                       y=c(1,1),
                       plot=1)
 
+```
+
+# 4. Simulating first differences
+\tiny
+$\newline$
+```{r}
 # Set up traces with labels and legend
 labelRRTrace <- textTile(labels=c("Married compared \n to Not Married"),
                          x=c( 55),
@@ -535,11 +653,16 @@ labelRRTrace <- textTile(labels=c("Married compared \n to Not Married"),
                          col=col[1],
                          plot=1)
 
+
+
+
 legendRRTrace <- textTile(labels=c("Logit estimates:", "95% confidence", "interval is shaded"),
                           x=c(80, 80, 80),
                           y=c(0.98, 0.95, 0.92),
                           cex=0.9,
                           plot=1)
+
+
 
 # Plot traces using tile
 tile(marriedRRTrace,
@@ -554,5 +677,9 @@ tile(marriedRRTrace,
      width=list(null=5,yaxistitle=4,yaxis.labelspace=-0.5)
      #,output=list(file="marriedRR",width=5.5)
 )
-
 ```
+
+# 4. Simulating first differences
+\scriptsize
+\centering
+\includegraphics{marriedRR.pdf}

@@ -175,7 +175,8 @@ llk.logit <- function(param,y,x) {
   # number of parameters to be estimated equals number of columns in x 
   # (i.e, one for constant and one for each covariates : total 4)
   xb <- x%*%b  
-  sum( y*log(1+exp(-xb)) + (1-y)*log(1+exp(xb))) # log-likelihood function for logit model 
+  sum( y*log(1+exp(-xb)) + (1-y)*log(1+exp(xb))) 
+  # log-likelihood function for logit model 
   # (based on our choice of standard logistic cdf as the systematic component)
                # optim is a minimizer, so use -lnL here
 }

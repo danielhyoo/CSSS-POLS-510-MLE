@@ -23,7 +23,7 @@ Recall from lecture the logit model:
 
 \begin{equation*}
 \begin{split}
-y_{i} &\sim \text{Bern}(y_{i}|\pi_{i}) \\
+y_{i} &\sim \text{Bern}(\pi_{i}) \\
 \pi_{i} &= \text{logit}^{-1}(\boldsymbol{x}_{i}\boldsymbol{\beta})\\
 \pi_{i} &= \frac{\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})}{1+\text{exp}(\boldsymbol{x}_{i}\boldsymbol{\beta})} = \frac{1}{1+\text{exp}(-\boldsymbol{x}_{i}\boldsymbol{\beta})}
 \end{split}

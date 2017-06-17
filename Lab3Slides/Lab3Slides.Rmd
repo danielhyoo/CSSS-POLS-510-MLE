@@ -20,7 +20,7 @@ subtitle: Logistic Regression
 
 Recall from lecture the logit model:
 
-$$y_{i} \sim \text{Bern}(y_{i}|\pi_{i})$$
+$$y_{i} \sim \text{Bern}(\pi_{i})$$
 
 $$\pi_{i} = \text{logit}^{-1}(\boldsymbol{x}_{i}\boldsymbol{\beta})$$
 

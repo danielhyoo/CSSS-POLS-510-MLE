@@ -1,8 +1,8 @@
 ---
 title: 'CSSS 510: Lab 3'
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 date: '2017-10-13'
 subtitle: Logistic Regression
 ---

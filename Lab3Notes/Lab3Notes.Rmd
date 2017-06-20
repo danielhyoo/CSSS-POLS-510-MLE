@@ -1,7 +1,6 @@
 ---
 title: 'CSSS 510: Lab 3'
 output:
-  word_document: default
   pdf_document: default
   html_document: default
 date: '2017-10-13'

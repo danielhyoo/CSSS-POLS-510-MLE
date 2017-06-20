@@ -1,10 +1,10 @@
 ---
 title: 'CSSS 510: Lab 4'
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 date: '2017-10-20'
-subtitle: Model Fitting 
+subtitle: Model Fitting
 ---
 
 # 0. Agenda
@@ -15,21 +15,19 @@ subtitle: Model Fitting
 
 3.  Bayesian Information Criterion
 
-4.  Deviance
+4.  Percent Correctly Predicted
 
-5.  Percent Correctly Predicted
+5.  Separation Plots
 
-6.  Separation Plots
+6.  Actual vs. Predicted Plots
 
-7.  Actual vs. Predicted Plots
+7.  Error vs. Predicted Plots
 
-8.  Error vs. Predicted Plots
+8.  ROC Plots
 
-9.  ROC Plots
+9. Residual vs Leverage Plots
 
-10. Residual vs Leverage Plots
-
-11. Cross-validation
+10. Cross-validation
 
 # 1. Likelihood Ratio Test
 
@@ -174,19 +172,10 @@ aic.test
 
 # 3. Bayesian Information Criterion
 
-# 4.  Percent Correctly Predicted
+The Bayesian Information Criterion (BIC) is similar to the AIC but penalizes the deviance in a different way:
 
-# 5.  Separation Plots
-
-# 6.  Actual vs Predicted Plots
-
-# 7.  Error vs Predicted Plots
-
-# 8.  ROC Plots
-
-# 9. Residual vs Leverage Plots
-
-# 10. Cross-validation
+$$BIC(\mathcal{M}) = D(\mathcal{M})+ \text{log}(n) \times|\mathcal{M}|$$
+Or -2 times the log likelihood of the model at its maximum multiplied by $\text{log}(n)$ times the number of parameters. Again, a model with a smaller BIC is preferred.
 
 ```{r}
 # Bayesian Information Criterion (BIC)
@@ -196,13 +185,16 @@ bic.test <- bic.m2 - bic.m1
 bic.test
 ```
 
+# 4.  Percent Correctly Predicted
 
-```{r}
-# Deviance (the "-0" terms refer to the log-likelihood of the saturated model,
-# which is zero for categorical outcomes)
-deviance.m1 <- -2*(ll.m1 - 0)
-deviance.m2 <- -2*(ll.m2 - 0)
-```
+We can also observe the percentage of observations our model that correctly predicts, such that
+
+$$\hat{y}\geq0.5 \quad \text{and} \quad y=1$$
+\centering
+or 
+$$\hat{y}<0.5 \quad \text{and} \quad y=0$$
+\flushleft
+In other words, we check to see how often the predicted probability from our model is greater than or equal to 0.5 when the observed value is 1 and is less than 0.5 when the observed value is 0.
 
 ```{r}
 # Percent correctly predicted (using glm result and my source code)
@@ -230,12 +222,55 @@ pcpi.m2
 #pre(glm.m1)
 ```
 
+# 5.  Separation Plots
+
+We can also visualize the PCP using separation plots.
+
+1. Sort the observations by predicted probability of the outcome
+
+2. Plot the 1s as red lines and 0s as tan lines
+
+3. Trace a horizontal black line as the predicted probability for each case
+
+Red lines to the left and tan lines to the right of where the horizontal line passes the half way point to the top are mispredictions.
+
 ```{r}
 # Separation plots
 separationplot(pred=glm.m1$fitted.values, actual=glm.m1$y)
+```
 
+```{r echo = F}
+library(knitr)
+opts_chunk$set(fig.lp = '')
+```
+
+\centering
+\includegraphics{Sep1.pdf}
+
+\flushleft
+
+
+```{r}
 separationplot(pred=glm.m2$fitted.values, actual=glm.m2$y)
 ```
+
+```{r echo = F}
+library(knitr)
+opts_chunk$set(fig.lp = '')
+```
+
+\centering
+\includegraphics{Sep2.pdf}
+
+\flushleft
+
+# 6.  Actual vs Predicted Plots
+
+Alternatively, we can plot the average of the observed values against the predicted probabilities of the model for small intervals or bins.
+
+For each bin or interval, the average of the predicted probabilities should match the average of the observed values (1s and 0s) if our model is performing well. 
+
+These will be plot along the $45^{\circ}$ line. When the average of the observed values is above (below) the $45^{\circ}$ line, the predicted probabilities over (under) predict. 
 
 ```{r}
 # binPredict for Actual vs Predicted plots, Error vs Predicted plots, and ROC plots
@@ -280,18 +315,33 @@ plot(binnedM1, display="avp", hide=TRUE, labx=0.35)
 
 # Show actual vs predicted of M1 and M2 to file
 plot(binnedM1, binnedM2, display="avp", hide=TRUE, labx=0.35)
+```
+
+# 7.  Error vs Predicted Plots
+
+The EVP plot is similar to the AVP plot but uses the ratio of the actual to the predicted probabilities on the y-axis. 
+
+```{r}
 
 # Send error vs predicted of M1 and M2 to file
 plot(binnedM1, binnedM2, display="evp", hide=TRUE, labx=0.35)
 
+```
+
+# 8.  ROC Plots
+
+ROC plots allow us to observe the trade off between sensitivity (true positive rate) and specificity (true negative rate).
+
+1. Sort cases from highest probability of 1 to lowest
+
+2. Start a line from the origin and 
+- move up $\frac{1}{\text{total positives}}$ for each positive case
+- move right $\frac{1}{\text{total negatives}}$ for each negative case
+
+```{r}
 # Send ROC plots for M1 and M2 to file
 plot(binnedM1, binnedM2, display="roc", thresholds=c(0.9, 0.8, 0.7, 0.6),
      labx=0.35)
-
-# Send actual vs predicted, error rate vs predicted, and ROC to file
-plot(binnedM1, binnedM2, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     hide=TRUE, labx=0.35)
-
 
 # Also see ROCR package for ROC curves and many other prediction metrics
 # and the verification package for a rudimentary roc plot function roc.plot()
@@ -308,9 +358,19 @@ concord.m1
 concord.m2
 concordi.m1
 concordi.m2
+
 ```
 
+# 9. Residual vs Leverage Plots
+
+Another familiar technique is to observe any outliers within the data set. 
+
+This is done by plotting each observation's leverage against its discrepancy, or the studentized residuals against the standardized hat-values.
+
+Recall that studentized residuals greater than 2 and less than -2 are considered large, while standardized hat-values of greater than 2 or 3 are considered large.
+
 ```{r}
+
 ###  Residuals using glm version
 hatscore.m1 <- hatvalues(glm.m1)/mean(hatvalues(glm.m1))
 rstu.m1 <- rstudent(glm.m1)
@@ -346,4 +406,10 @@ lines(c(usr[1], usr[2]), c(-2,-2), lty="dashed")
 lines(c(usr[1], usr[2]), c(2,2), lty="dashed")
 lines(c(3,3), c(usr[3], usr[4]), lty="dashed")
 
+```
+
+# 10. Cross-validation
+
+
+```{r}
 ```

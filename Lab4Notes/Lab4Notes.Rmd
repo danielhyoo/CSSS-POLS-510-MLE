@@ -21,9 +21,9 @@ subtitle: Model Fitting
 
 6.  Separation Plots
 
-7.  Actual vs Predicted Plots
+7.  Actual vs. Predicted Plots
 
-8.  Error vs Predicted Plots
+8.  Error vs. Predicted Plots
 
 9.  ROC Plots
 
@@ -33,28 +33,27 @@ subtitle: Model Fitting
 
 # 1. Likelihood Ratio Test
 
-# 2. Akaike Information Criterion
+Given two nested models:
 
-# 3. Bayesian Information Criterion
+$$\mathcal{M}: \text{logit}^{-1}(\beta_{0} + \beta_{1}x_{1} + ...+\beta_{p}x_{p})$$
 
-# 4.  Deviance
+$$\mathcal{M}':\text{logit}^{-1}(\beta_{0} + \beta_{1}x_{1} + ...+\beta_{p}x_{p}+\beta_{p+1}x_{p+1}+\beta_{p'}x_{p'})$$
 
-# 5.  Percent Correctly Predicted
+The likelihood ratio statistic tests the null hypothesis that the additional paramters are equal to zero:
 
-# 6.  Separation Plots
+$$H_{0}: \beta_{p+1}=...=\beta_{p'}=0$$
+The likelihood ratio statistic is the difference in the deviances of $\mathcal{M}$ and $\mathcal{M'}$, where the deviance is -2 multiplied by the log likelihood of the model at its maximum:
 
-# 7.  Actual vs Predicted Plots
+$$D(\mathcal{M})= -2l(\mathcal{M})$$
+The likelihood ratio statistic is therefore defined as follows:
 
-# 8.  Error vs Predicted Plots
+$$G^2(\mathcal{M}|\mathcal{M'})=D(\mathcal{M})-D(\mathcal{M'})$$
+The likelihood ratio statistic follows a Chi-squared distributed with $|\mathcal{M}|$ - $|\mathcal{M'}|$ degrees of freedom, where $|\mathcal{M}|$ is the number of parameters in model $\mathcal{M}$.
 
-# 9.  ROC Plots
-
-# 10. Residual vs Leverage Plots
-
-# 11. Cross-validation
+If the p-value is smaller than 0.05, we reject the null hypothesis, and we favor the more complex model $\mathcal{M'}$ to $\mathcal{M}$.
 
 
-```{r}
+```{r include=FALSE}
 ##  Estimation by ML using optim() or by glm() on reduced dataset:
 ##     Model 1:  Age, Age^2, HS, College
 ##     Model 2:  Age, Age^2, HS, College, Married
@@ -79,7 +78,9 @@ source("binPredict.R")   # Code for making predicted vs actual plots
 col <- brewer.pal(5, "Set1")
 blue <- col[2]
 orange <- col[5]
+```
 
+```{r}
 # Models in R formula format
 m1 <- vote00 ~ age + I(age^2) + hsdeg + coldeg
 m2 <- vote00 ~ age + I(age^2) + hsdeg + coldeg + marriedo
@@ -122,8 +123,6 @@ ll.m1 <- -logit.m1$value  # likelihood at maximum
 
 # Alternative estimation technique:  GLM
 glm.m1 <- glm(m1, data=data, family="binomial")
-print(summary.glm(glm.m1))
-
 
 # Fit logit model with added covariate:  married
 ls.result <- lm(y~x2)  # use ls estimates as starting values
@@ -137,10 +136,7 @@ ll.m2 <- -logit.m2$value  # likelihood at maximum
 
 # GLM estimation of model with married
 glm.m2 <- glm(m2, data=data, family="binomial")
-print(summary.glm(glm.m2))
-```
 
-```{r}
 ## Goodness of fit of model 1 and model 2
 
 # Check number of parameters in each model
@@ -157,13 +153,16 @@ lr.test.p <- pchisq(lr.test,df=(k.m2 - k.m1),lower.tail=FALSE)
 lr.test.p
 ```
 
-```{r}
-# Bayesian Information Criterion (BIC)
-bic.m1 <- log(nrow(x1))*k.m1 - 2*ll.m1
-bic.m2 <- log(nrow(x2))*k.m2 - 2*ll.m2
-bic.test <- bic.m2 - bic.m1
-bic.test
-```
+# 2. Akaike Information Criterion
+
+For non-nested models, we cannot use likelihood ratio tests. Instead we turn to several information theoretic measures to assess model fit, which can be thought of as penalized LR tests. 
+
+The Akaike Information Criterion (AIC) is defined as follows:
+
+$$AIC(\mathcal{M}) = D(\mathcal{M})+2\times|\mathcal{M}|$$
+Or -2 times the log likelihood of the model at its maximum plus 2 times the number of parameters. 
+
+A model with a smaller AIC is preferred. This is because the first part, $D(\mathcal{M})$, will be lower as the likelihood increases, but it also always decreases as more variables are added to the model. But, the second part, $2\times|\mathcal{M}|$, always increases as more variables are added to the model, and thus penalizes the first part. Put together, the two parts create a balance between fit and complexity. 
 
 ```{r}
 # Akaike Information Criterion (AIC)
@@ -172,6 +171,31 @@ aic.m2 <- 2*k.m2 - 2*ll.m2
 aic.test <- aic.m2 - aic.m1
 aic.test
 ```
+
+# 3. Bayesian Information Criterion
+
+# 4.  Percent Correctly Predicted
+
+# 5.  Separation Plots
+
+# 6.  Actual vs Predicted Plots
+
+# 7.  Error vs Predicted Plots
+
+# 8.  ROC Plots
+
+# 9. Residual vs Leverage Plots
+
+# 10. Cross-validation
+
+```{r}
+# Bayesian Information Criterion (BIC)
+bic.m1 <- log(nrow(x1))*k.m1 - 2*ll.m1
+bic.m2 <- log(nrow(x2))*k.m2 - 2*ll.m2
+bic.test <- bic.m2 - bic.m1
+bic.test
+```
+
 
 ```{r}
 # Deviance (the "-0" terms refer to the log-likelihood of the saturated model,

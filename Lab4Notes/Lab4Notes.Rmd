@@ -1,8 +1,8 @@
 ---
 title: 'CSSS 510: Lab 4'
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 date: '2017-10-20'
 subtitle: Model Fitting
 ---
@@ -410,6 +410,63 @@ lines(c(3,3), c(usr[3], usr[4]), lty="dashed")
 
 # 10. Cross-validation
 
+For cross-validation, we select an error metric: in this case, we use the percent correctly predicted. 
+
+In leave-on-out cross-validation, we remove each observation then find the rate at which the model correctly predicts the left out observation. 
+
+We can then compare the PCP across models.
 
 ```{r}
+### Cross-validation (takes a few minutes to run)
+
+## A precent-correctly-predicted-style cost function
+## r is actual y, pi is expected y
+## Rate of inaccuracy: mean(vote00!=round(yp))
+costpcp <- function(r, pi=0) mean(r!=round(pi))
+
+## an alternative cost function for binary data
+## cost <- function(r, pi=0) mean(abs(r-pi)>0.5)
+
+cv.m1 <- cv.glm(data, glm.m1, costpcp)
+cvPCP.m1 <- 1 - cv.m1$delta[2]
+
+cv.m2 <- cv.glm(data, glm.m2, costpcp)
+cvPCP.m2 <- 1 - cv.m2$delta[2]
+
+cvPCP.m1
+cvPCP.m2
+
+#### More cross-validation
+
+## A simple leave-one-out cross-validation function for logit glm; returns predicted probs
+loocv <- function (obj) {
+    data <- obj$data
+    m <- dim(data)[1]
+    form <- formula(obj)
+    fam <- obj$family$family
+    loo <- rep(NA, m)
+    for (i in 1:m) {
+        i.glm <- glm(form, data = data[-i, ], family = fam)
+        loo[i] <- predict(i.glm, newdata = data[i,], family = fam, type = "response")
+    }
+    loo
+}
+
+# LOOCV for models 1 and 2
+predCVm1 <- loocv(glm.m1)
+predCVm2 <- loocv(glm.m2)
+
+# Make cross-validated AVP and ROC plots; note use of newpred input in binPredict
+binnedM1cv <- binPredict(glm.m1, newpred=predCVm1, col=blue, label="M1: LOO-CV", quantiles=TRUE)
+
+plot(binnedM1cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25)
+
+binnedM2cv <- binPredict(glm.m2, newpred=predCVm2, col=orange, label="M2: LOO-CV", quantiles=TRUE)
+
+plot(binnedM2cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25)
+
+plot(binnedM1cv, binnedM2cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
+     labx=0.25)
 ```

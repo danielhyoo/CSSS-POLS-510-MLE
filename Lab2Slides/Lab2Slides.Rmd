@@ -8,26 +8,66 @@ subtitle: Introduction to Maximum Likelihood Estimation
 
 # 0. Agenda
 
-1. Simulating heteroskedastic normal data $\newline$
+1. Housekeeping: `simcf`, `tile`, \LaTeX, R Markdown $\newline$
 
-2. Fitting a model using the simulated data $\newline$
+2. Questions about Homework 1 or lecture $\newline$
 
-3. Calculating predicted values $\newline$ 
+3. Simulating heteroskedastic normal data $\newline$
 
-4. Fitting the heteroskedastic normal model using ML $\newline$
+4. Fitting a model using the simulated data $\newline$
 
-5. Simulating predicted values and confidence intervals 
+5. Calculating predicted values $\newline$ 
 
-# 1. Simulating heteroskedastic normal data
+6. Fitting the heteroskedastic normal model using ML $\newline$
+
+7. Simulating predicted values and confidence intervals 
+
+# 1. Housekeeping
+1. Please make sure that you have R or R Studio installed on your computers with Chris's `simcf` and `tile` packages installed
+    + You can find these packages on the [course website](http://faculty.washington.edu/cadolph/index.php?page=60) and follow the instructions to install (do not unzip the `.tgz` files)
+
+2. If you would like to learn how to use \LaTeX, this is a great opportunity to do so
+    + An easy way to get introduced to this is to use R Markdown within R Studio
+    + Make sure you have TeX installed, which you can find [here](https://www.latex-project.org/get/#distributions)
+    + Make sure you have R Markdown installed using `install.packages("rmarkdown")`
+    + Now in R Studio, choose `File` $\rightarrow$ `New File` $\rightarrow$ `R Markdown`
+    
+# 1. Housekeeping
+
+3. Using R Markdown
+    + Choose to compile your document as a PDF or HTML file and give it a title
+    + Now you will be given a template
+    + Embed your code within \begin{verbatim}```{r}\end{verbatim} and \begin{verbatim}```\end{verbatim} and write up your text outside
+    + Then press `Knit` and it will produce a PDF or HTML document with your code, R output, and text nicely formatted 
+    + Please try to complete your homeworks in this way
+
+# 2. Questions
+
+# 3. Simulating heteroskedastic normal data
+
+\centering
+\includegraphics{Hetnormal.pdf}
+
+# 3. Simulating heteroskedastic normal data
+
+\begin{columns}
+  \column{0.5\linewidth}
+\centering
 Stochastic component:
 $$y \sim N(\mu_{i}, \sigma_{i}^{2})$$
 
 Systematic components:
 $$\mu = \boldsymbol{x}_{i}\boldsymbol{\beta}$$
-
 $$ \sigma_{i}^{2} = \text{exp}(\boldsymbol{z}_{i}\boldsymbol{\gamma})$$
+\column{0.5\linewidth}
+\centering
+\includegraphics{Hetnormal.pdf}
+\end{columns}
 
-# 1. Simulating heteroskedastic normal data
+
+
+
+# 3. Simulating heteroskedastic normal data
 \small 
 
 1. Set the number of observations to 1500 ($n$)
@@ -48,7 +88,7 @@ $$ \sigma_{i}^{2} = \text{exp}(\boldsymbol{z}_{i}\boldsymbol{\gamma})$$
 
 9. Plot the data  
 
-# 1. Simulating heteroskedastic normal data
+# 3. Simulating heteroskedastic normal data
 \scriptsize 
 ```{r}
 
@@ -70,7 +110,7 @@ w1 <- runif(n) # Length of each vector is 1500
 w2 <- runif(n)
 ```
 
-# 1. Simulating heteroskedastic normal data
+# 3. Simulating heteroskedastic normal data
 \scriptsize 
 ```{r}
 x <- cbind(w0, w1, w2) # Create a matrix of the covariates
@@ -84,6 +124,7 @@ sigma2 <- exp(x%*%gamma) # Create the systematic component for the variance
 #ith row of sigma 2 thus equals exp(1+0+w2_i*3). i.e., it is a function of w2
 
 y <- mu + rnorm(n)*sqrt(sigma2) # Create the response variable
+#y <-rnorm(obs, mean=mu, sd=sqrt(sigma2))
 
 data <- cbind(y,w1,w2) # Save the data to a data frame
 data <- as.data.frame(data)
@@ -91,27 +132,20 @@ names(data) <- c("y","w1","w2")
 
 par(mfrow=c(1,3)) #Plot the data
 
-#pdf("YvsW1.pdf")
 plot(y=y,x=w1)
-#dev.off()
 
-#pdf("YvsW2.pdf")
 plot(y=y,x=w2)
-#dev.off()
 
-#pdf("W1vsW2.pdf")
 plot(y=w1,x=w2)
-#dev.off()
-
 ```
 
-# 2. Fitting a model using the simulated data
+# 4. Fitting a model using the simulated data
 
 1. Assume we don’t know the true value of the parameters and fit a model using least squares (use the $\textsf{lm()}$ function and regress the response variable on the two covariates) $\newline$
 
 2. Calculate and print the AIC
 
-# 2. Fitting a model using the simulated data
+# 4. Fitting a model using the simulated data
 \scriptsize
 ```{r}
 
@@ -119,7 +153,7 @@ ls.result <- lm(y ~ w1 + w2) #Fit a linear model using the simulated data
 print(summary(ls.result))
 ```
 
-# 2. Fitting a model using the simulated data
+# 4. Fitting a model using the simulated data
 \scriptsize
 ```{r}
 
@@ -128,7 +162,7 @@ print(ls.aic)
 
 ```
 
-# 3. Calculating predicted values
+# 5. Calculating predicted values
 
 ## Scenario 1: Vary covariate 1
 
@@ -138,7 +172,7 @@ print(ls.aic)
 
 3. Plot the predicted values
 
-# 3. Calculating predicted values - Scenario 1
+# 5. Calculating predicted values - Scenario 1
 \scriptsize
 ```{r}
 # Calculate predicted values using predict()
@@ -159,7 +193,7 @@ xhypo[,1] <- w1range
 head(xhypo)
 ```
 
-# 3. Calculating predicted values - Scenario 1
+# 5. Calculating predicted values - Scenario 1
 \scriptsize
 ```{r}
 
@@ -174,7 +208,7 @@ xplot <- cbind(w1range,w1range,w1range)
 #pdf("homoYvsW1.pdf")
 ```
 
-# 3. Calculating predicted values - Scenario 1
+# 5. Calculating predicted values - Scenario 1
 \tiny
 ```{r}
 matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), 
@@ -182,7 +216,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 #dev.off()
 ```
 
-# 3. Calculating predicted values 
+# 5. Calculating predicted values 
 ## Scenario 2: Vary covariate 2
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
@@ -191,7 +225,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 
 3. Plot the predicted values
 
-# 3. Calculating predicted values - Scenario 2
+# 5. Calculating predicted values - Scenario 2
 \scriptsize
 ```{r}
 # Calculate predicted values using predict()
@@ -216,7 +250,7 @@ xplot <- cbind(w2range,w2range,w2range)
 #pdf("homoYvsW2.pdf")
 ```
 
-# 3. Calculating predicted values - Scenario 2
+# 5. Calculating predicted values - Scenario 2
 \tiny
 ```{r}
 matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("black"),
@@ -225,7 +259,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("bla
 
 ```
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 
 1. Create the input matrices (the two covariates)
 
@@ -248,7 +282,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("bla
 10. Separate the simulated betas from the simulated gammas
 
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 
 2. Write a likelihood function for the heteroskedastic normal model 
 
@@ -267,7 +301,7 @@ Recall from lecture:
 
 
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 $\newline$
 \scriptsize
 ```{r}
@@ -296,7 +330,7 @@ llk.hetnormlin <- function(param,y,x,z) {
   }
 ```
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 \scriptsize
 ```{r}
 # Create input matrices
@@ -317,7 +351,7 @@ hetnorm.result <-
 # you can make optim a maximizer by adding control=list(fnscale=-1)
 ```
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 \scriptsize
 ```{r}
 pe <- hetnorm.result$par   # point estimates
@@ -333,7 +367,7 @@ se <- sqrt(diag(vc))    # standard errors
 se
 ```
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 \scriptsize
 ```{r}
 mle.result<-round(cbind(pe[1:3], se[1:3]),2) # see pe and se 
@@ -350,7 +384,7 @@ ll <- -hetnorm.result$value
 ll
 ```
 
-# 4. Fitting the heteroskedastic normal model using ML
+# 6. Fitting the heteroskedastic normal model using ML
 \scriptsize
 ```{r}
 # The AIC is the deviance or -2*ll at its max plus 2*number of 
@@ -365,7 +399,7 @@ print(hetnorm.aic)
 print(ls.aic)
 ```
 
-# 5. Simulating predicted values and confidence intervals
+# 6. Simulating predicted values and confidence intervals
 
 ## Scenario 1: Vary covariate 1
 
@@ -377,7 +411,7 @@ print(ls.aic)
 
 Recall from lecture:
 
-# 5. Simulating predicted values and confidence intervals - Scenario 1
+# 7. Simulating predicted values and confidence intervals - Scenario 1
 \scriptsize
 ```{r}
 # Simulate results by drawing from the model predictive distribution
@@ -404,7 +438,7 @@ varmodel <- (y ~ w1 + w2)
 w1range <- seq(0:20)/20
 ```
 
-# 5. Simulating predicted values and confidence intervals - Scenario 1
+# 7. Simulating predicted values and confidence intervals - Scenario 1
 \scriptsize
 ```{r}
 # Set up a matrix with the hypothetical scenarios (varied w1, all else equal)
@@ -431,7 +465,7 @@ yplot <- cbind(simres.w1$pe, simres.w1$lower, simres.w1$upper)
 xplot <- cbind(w1range,w1range,w1range)
 ```
 
-# 5. Simulating predicted values and confidence intervals - Scenario 1
+# 7. Simulating predicted values and confidence intervals - Scenario 1
 \tiny
 ```{r}
 #pdf("heteroYvsW1.pdf")
@@ -440,7 +474,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 #dev.off()
 ```
 
-# 5. Simulating predicted values and confidence intervals - Scenario 2
+# 7. Simulating predicted values and confidence intervals - Scenario 2
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
 
@@ -448,7 +482,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 
 3. Plot the results
 
-# 5. Simulating predicted values and confidence intervals - Scenario 2
+# 7. Simulating predicted values and confidence intervals - Scenario 2
 \scriptsize
 ```{r}
 # Start by calculating P(Y|w2) for different w1 values
@@ -476,7 +510,7 @@ xplot <- cbind(w1range,w1range,w1range)
 #pdf("heteroYvsW2.pdf")
 ```
 
-# 5. Simulating predicted values and confidence intervals - Scenario 2
+# 7. Simulating predicted values and confidence intervals - Scenario 2
 \scriptsize
 ```{r}
 matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),

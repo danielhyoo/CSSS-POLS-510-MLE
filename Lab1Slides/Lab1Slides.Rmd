@@ -8,25 +8,49 @@ subtitle: Logistics & R Refresher
 
 # Logistics
 
-1. **Lab Sessions**: Fri, 3:30-5:20pm in Smith 105
-    + Emphasis on application of material from lecture using examples; clarification and extention of lecture material; Q & A for homeworks and lectures
-    + Materials will be available on the [**course website**](http://faculty.washington.edu/cadolph/index.php?page=21) and my [**Github**](https://github.com/danielhyoo) site on Wednesday evening
-    $\newline$
+1. **Lab Sessions**: Fri, 4:00-5:20pm in Savery 117
+    + Covers application of material from lecture using examples; clarification and extention of lecture material; Q & A for homeworks and lectures
+    + Materials will be available on the [**course website**](http://faculty.washington.edu/cadolph/index.php?page=21) 
 
-2. **Office Hours**: Tues and Thurs, 3:30-4:20pm in Smith 220
+2. **Office Hours**: Tues, 3:00-4:20pm in Smith 220
     + Available for trouble shooting and specific questions about homework and lecture materials
-    $\newline$
-
+    
 3. **Homeworks**: 5-6 due every 2 weeks or so
-    + Should be done using $\textsf{R}$ or $\textsf{R}$ Studio with write up in \LaTeX 
-    + Using $\textsf{R}$ Studio with $\textsf{R}$ Markdown is the simplest way to do this (*Please* do not handwrite your homeworks or do them in MS Word)
+    + Ideally, done using $\textsf{R}$ or $\textsf{R}$ Studio with write up in \LaTeX 
+    + Using $\textsf{R}$ Studio with $\textsf{R}$ Markdown is an easy way to do this 
     + We will use two of Chris's packages extensively: $\textsf{simcf}$ and $\textsf{tile}$
+
+# Survey Results
+
+\centering
+\includegraphics{Rplot.pdf}
+
+# Survey Results
+
+\centering
+\includegraphics{latexplot.pdf}
+
+# Survey Results
+
+\centering
+\includegraphics{logitplot.pdf}
+
+# Survey Results
+
+\centering
+\includegraphics{probitplot.pdf}
+
+# Survey Results
+
+\centering
+\includegraphics{mlplot.pdf}
+
 
 # Logistics
 
-1. When this course is over, you should be able to do the following (and much more) in $\textsf{R}$:
+1. When this course is over, you should be able to do the following (and much more):
     + Fit a logistic regression model using both the $\textsf{glm}$ function and "by hand" using $\textsf{optim}$, extract parameters of interest, and interpret these in probabilities
-    + Compute predicted probabilities and use simulation to find the expected values and confidence intervals of $\hat{\pi}$ across counterfactuals values of $\boldsymbol{x}$ 
+    + Compute predicted probabilities and use simulation to find the confidence intervals of $\hat{\pi}$ across counterfactuals values of $\boldsymbol{x}$ 
     + Use cross-validation to assess the predictive accuracy of several models and also compare these models across a variety of in-sample goodness of fit tests
     + Fit a variety of bounded and unbounded count models that address overdispersion 
     + Use one of several algorithms to impute missing data
@@ -34,8 +58,8 @@ $\newline$
 
 # Logistics
 
-2. The course moves fast: you should at least be comfortable doing the following for the homework assignments and project
-    + data wrangling (tidying and transforming data)
+2. The course moves fast: you should comfortable doing the following for the homework assignments and project
+    + tidying and transforming data
     + importing and exporting data sets 
     + generating plots of your data and results
     + writing basic functions and loops for repeated procedures
@@ -57,7 +81,7 @@ $\newline$
 
 3. vector.3: Results of 10 single binomial trials with a probability of 0.4
 
-4. vector.4: For 100 binomial observations with 5 trials for each observation with a probability of 0.4
+4. vector.4: Sample 100 observations from a 5-trial binomial distribution with a probability of success of 0.4
 $\newline$
 
 # Vectors

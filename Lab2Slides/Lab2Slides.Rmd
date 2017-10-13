@@ -20,7 +20,7 @@ subtitle: Introduction to Maximum Likelihood Estimation
 
 6. Fitting the heteroskedastic normal model using ML $\newline$
 
-7. Simulating predicted values and confidence intervals 
+7. Simulating predicted values and prediction intervals 
 
 # 1. Housekeeping
 1. Please make sure that you have R or R Studio installed on your computers with Chris's `simcf` and `tile` packages installed
@@ -177,8 +177,6 @@ Take a minute and try to define
 5. Bayesian inference and likelihood inference $\newline$
 
 6. Maximum likelihood estimation $\newline$
-
-7. Gradient search $\newline$
 
 # Questions
 
@@ -443,19 +441,19 @@ print(hetnorm.aic)
 print(ls.aic)
 ```
 
-# 6. Simulating predicted values and confidence intervals
+# 6. Simulating predicted values and prediction intervals
 
 ## Scenario 1: Vary covariate 1
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 1 while keeping covariate 2 at its mean $\newline$
 
-2. Simulate the predicted values and the confidence intervals using $\textsf{simcf}$ $\newline$
+2. Simulate the predicted values and the prediction intervals using $\textsf{simcf}$ $\newline$
 
 3. Plot the results $\newline$
 
 Recall from lecture:
 
-# 7. Simulating predicted values and confidence intervals - Scenario 1
+# 7. Simulating predicted values and prediction intervals - Scenario 1
 \scriptsize
 ```{r}
 # Simulate results by drawing from the model predictive distribution
@@ -482,7 +480,7 @@ varmodel <- (y ~ w1 + w2)
 w1range <- seq(0:20)/20
 ```
 
-# 7. Simulating predicted values and confidence intervals - Scenario 1
+# 7. Simulating predicted values and prediction intervals - Scenario 1
 \scriptsize
 ```{r}
 # Set up a matrix with the hypothetical scenarios (varied w1, all else equal)
@@ -497,7 +495,7 @@ zhypo <- cfMake(varmodel, data, nscen = length(w1range))
 for (i in 1:length(w1range)) {
   zhypo <- cfChange(zhypo, "w1", x=w1range[i], scen=i) 
 }
-# Simulate the predicted Y's and CI's
+# Simulate the predicted Y's and PI's
 simres.w1 <- hetnormsimpv(xhypo,simbetas,
                           zhypo,simgammas,
                           ci=0.95,
@@ -509,7 +507,7 @@ yplot <- cbind(simres.w1$pe, simres.w1$lower, simres.w1$upper)
 xplot <- cbind(w1range,w1range,w1range)
 ```
 
-# 7. Simulating predicted values and confidence intervals - Scenario 1
+# 7. Simulating predicted values and prediction intervals - Scenario 1
 \tiny
 ```{r}
 #pdf("heteroYvsW1.pdf")
@@ -518,15 +516,15 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 #dev.off()
 ```
 
-# 7. Simulating predicted values and confidence intervals - Scenario 2
+# 7. Simulating predicted values and prediction intervals - Scenario 2
 
 1. Create a data frame with a set of hypothetical scenarios for covariate 2 while keeping covariate 1 at its mean $\newline$
 
-2. Simulate the predicted values and the confidence intervals using $\textsf{simcf}$ $\newline$
+2. Simulate the predicted values and the prediction intervals using $\textsf{simcf}$ $\newline$
 
 3. Plot the results
 
-# 7. Simulating predicted values and confidence intervals - Scenario 2
+# 7. Simulating predicted values and prediction intervals - Scenario 2
 \scriptsize
 ```{r}
 # Start by calculating P(Y|w2) for different w1 values
@@ -543,7 +541,7 @@ for (i in 1:length(w2range)) {
   zhypo <- cfChange(zhypo, "w2", x=w2range[i], scen=i) 
 }
 
-# Simulate the predicted Y's and CI's
+# Simulate the predicted Y's and PI's
 simres.w2 <- hetnormsimpv(xhypo,simbetas,
                           zhypo,simgammas,
                           ci=0.95,
@@ -554,7 +552,7 @@ xplot <- cbind(w1range,w1range,w1range)
 #pdf("heteroYvsW2.pdf")
 ```
 
-# 7. Simulating predicted values and confidence intervals - Scenario 2
+# 7. Simulating predicted values and prediction intervals - Scenario 2
 \scriptsize
 ```{r}
 matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),

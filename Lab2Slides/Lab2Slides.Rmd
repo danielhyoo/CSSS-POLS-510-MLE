@@ -162,6 +162,24 @@ print(ls.aic)
 
 ```
 
+# Lecture Recap: Key Terms
+
+Take a minute and try to define
+
+1. Systematic and stochastic component $\newline$
+
+2. Expected value and predicted value (and fitted value) $\newline$
+
+3. Confidence interval and prediction interval $\newline$
+
+4. Bayes Theorem $\newline$
+
+5. Bayesian inference and likelihood inference $\newline$
+
+6. Maximum likelihood estimation $\newline$
+
+7. Gradient search $\newline$
+
 # 5. Calculating predicted values
 
 ## Scenario 1: Vary covariate 1
@@ -199,6 +217,29 @@ head(xhypo)
 
 # Calculate Predicted Y using predict()
 simls.w1<-predict(ls.result,newdata = xhypo,interval="prediction",level=0.95)
+head(simls.w1)
+
+# Plot them
+yplot <- simls.w1
+xplot <- cbind(w1range,w1range,w1range) 
+# need to have the same dimension [21,3]
+#pdf("homoYvsW1.pdf")
+```
+
+# 5. Calculating predicted values - Scenario 1
+\tiny
+```{r}
+matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), 
+        col=c("black"), xlab = "w1", ylab = "Predicted Y")
+#dev.off()
+```
+
+# 5. Calculating predicted values - Scenario 1
+\scriptsize
+```{r}
+
+# Calculate Predicted Y using predict()
+simls.w1<-predict(ls.result,newdata = xhypo,interval="confidence",level=0.95)
 head(simls.w1)
 
 # Plot them

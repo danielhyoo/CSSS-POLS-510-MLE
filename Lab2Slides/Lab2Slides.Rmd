@@ -180,6 +180,8 @@ Take a minute and try to define
 
 7. Gradient search $\newline$
 
+# Questions
+
 # 5. Calculating predicted values
 
 ## Scenario 1: Vary covariate 1
@@ -239,6 +241,7 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"),
 ```{r}
 
 # Calculate Predicted Y using predict()
+# Compare prediction intervals with confidence intervals
 simls.w1<-predict(ls.result,newdata = xhypo,interval="confidence",level=0.95)
 head(simls.w1)
 

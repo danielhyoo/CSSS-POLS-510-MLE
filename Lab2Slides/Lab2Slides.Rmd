@@ -303,26 +303,41 @@ matplot(y=yplot, x=xplot, type="l", lty=c("solid","dashed","dashed"), col=c("bla
 
 # 6. Fitting the heteroskedastic normal model using ML
 
-1. Create the input matrices (the two covariates)
+- Create the input matrices (the two covariates)
 
-2. Write a likelihood function for the heteroskedastic normal model 
+- Write a likelihood function for the heteroskedastic normal model 
 
-3. Find the MLEs using the $\textsf{optim()}$ function
+- Find the MLEs using the $\textsf{optim()}$ function
 
-4. Extract the point estimates
+- Extract the point estimates
 
-5. Compute the standard errors
+- Compute the standard errors
 
-6. Compare with the least squares estimates
+- Compare with the least squares estimates
 
-7. Find the log likelihood at its maximum
+- Find the log likelihood at its maximum
 
-8. Compute the AIC
+- Compute the AIC
 
-9. Simulate the results by drawing from the model’s predictive distribution 
+- Simulate the results by drawing from the model’s predictive distribution 
 
-10. Separate the simulated betas from the simulated gammas
+- Separate the simulated betas from the simulated gammas
 
+# Agenda
+
+- Clarification of lecture or Homework 2 \newline
+
+- Finish example using `optim` from last week \newline
+
+- Review numerical optimization (gradient descent/ascent) \newline
+
+- Review MLE standard errors \newline
+
+- Discuss logistic regression \newline
+
+- Take questions about Homework 2
+
+# Clarification of lecture or Homework 2
 
 # 6. Fitting the heteroskedastic normal model using ML
 
@@ -340,8 +355,6 @@ Recall from lecture:
 \mathcal{L}(\boldsymbol{\beta}, \gamma|\boldsymbol{y}) &= - \frac{1}{2} \sum^{n}_{i=1} \boldsymbol{z}_{i}\boldsymbol{\gamma} - \frac{1}{2} \sum^{n}_{i=1} \frac{(y_{i}- \boldsymbol{x}_{i}\boldsymbol{\beta})^2}{\text{exp}(\boldsymbol{z}_{i}\boldsymbol{\gamma})}
 \end{split}
 \end{equation*}
-
-
 
 # 6. Fitting the heteroskedastic normal model using ML
 $\newline$
@@ -419,7 +432,6 @@ mle.result
 
 round(summary(ls.result)$coefficients[,c(1,2)],2) #compare with the ls result
 
-
 ll <- -hetnorm.result$value  
 # likelihood at maximum, no need to  
 # have a negative sign if you set optime to be a maximizer. 
@@ -441,7 +453,38 @@ print(hetnorm.aic)
 print(ls.aic)
 ```
 
-# 6. Simulating predicted values and confidence intervals
+# 6. Numerical optimization 
+
+Q: What is numerical optimization and why do we use it?
+
+`optim` uses gradient descent as a method of numerical optimization
+
+- constructs a quadratic approximation of the likelihood function (using Taylor Series)
+
+- starts with an initial set of parameter values
+
+- uses the first derivative to check if the function is minimized
+
+- increases (or decreases) the initial values based on the first derivatives
+
+- decides on the magnitude of the increase (or decrease) based on the second derivatives
+
+- continues until the first derivatives reaches some tolerance level near zero
+
+
+# 6. MLE Standard Errors
+
+- Recall that the MLE standard errors are computed using the matrix of second derivatives where the likelihood is at its max
+
+- Intuitively, when these are large, the likelihood function is steeper, and when these are small, it is flatter
+
+- MLEs are more precise in the former and less precise in the latter
+
+- The variance-covariance matrix is the inverse of the matrix of second derivatives (Hessian matrix)
+
+- The MLE standard errors are therefore computed as the square root of the diagonal of the inverse of the Hessian or matrix of second derivatives
+
+# 7. Simulating predicted values and confidence intervals
 
 ## Scenario 1: Vary covariate 1
 

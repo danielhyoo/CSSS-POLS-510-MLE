@@ -2,7 +2,7 @@
 title: 'CSSS 510: Lab 3'
 output:
   beamer_presentation
-date: '2017-10-13'
+date: '2017-10-27'
 subtitle: Logistic Regression
 ---
 
@@ -52,13 +52,13 @@ opts_chunk$set(fig.lp = '')
 
 # 1. Deriving a likelihood function for the logistic regression model
 
-The logistic regression model is obtained if we assume the errors of this latent variable model follow a standard logistic distribution.
+\centering
+\includegraphics{Fig2.pdf}
 
-Recall that the pdf and cdf of the standard logisitic distribution are as follows:
+# 1. Deriving a likelihood function for the logistic regression model
+\centering
+\includegraphics{Fig3.pdf}
 
-$$f(t) = \frac{\text{exp}(t)}{(1 + \text{exp}(t))^2}$$
-$\newline$
-$$F(t) = \frac{\text{exp}(t)}{1+\text{exp}(t)}$$
 
 # 1. Deriving a likelihood function for the logistic regression model
 
@@ -72,15 +72,6 @@ We therefore have the following:
 &= F(\beta_{0}^{L}+\beta_{1}^{L}x)
 \end{split}
 \end{equation*}
-
-# 1. Deriving a likelihood function for the logistic regression model
-
-\centering
-\includegraphics{Fig2.pdf}
-
-# 1. Deriving a likelihood function for the logistic regression model
-\centering
-\includegraphics{Fig3.pdf}
 
 # 1. Deriving a likelihood function for the logistic regression model
 
@@ -106,7 +97,7 @@ The logit function is the inverse of the logistic function:
 
 $$\text{logit}(p)=\text{log}\frac{p}{1-p}$$
 or
-$$\text{logit}^{-1}(p)=\frac{\text{exp}(x)}{1+\text{exp}(x)}$$
+$$\text{logit}^{-1}(\alpha)=\frac{\text{exp}(\alpha)}{1+\text{exp}(\alpha)}$$
 
 We therefore have the following
 

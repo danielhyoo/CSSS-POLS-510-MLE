@@ -101,9 +101,9 @@ $$\text{logit}^{-1}(\alpha)=\frac{\text{exp}(\alpha)}{1+\text{exp}(\alpha)}$$
 
 We therefore have the following
 
-$$\text{Pr}(y=1|x)=\text{logit}^{-1}(\beta_{1}^{L}+\beta_{1}^{L}x)$$
+$$\text{Pr}(y=1|x)=\text{logit}^{-1}(\beta_{0}^{L}+\beta_{1}^{L}x)$$
 or
-$$\text{logit}(\text{Pr}(y=1|x))=\beta_{1}^{L}+\beta_{1}^{L}x$$
+$$\text{logit}(\text{Pr}(y=1|x))=\beta_{0}^{L}+\beta_{1}^{L}x$$
 or
 $$\text{log}\frac{\text{Pr}(y=1|x)}{\text{Pr}(y=0|x)}=\beta_{0}^{L}+\beta_{1}^{L}x.$$
 $\newline$

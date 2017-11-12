@@ -2,8 +2,8 @@
 title: 'CSSS 510: Lab 4'
 output:
   beamer_presentation
-date: '2017-10-20'
-subtitle: Model Fitting
+date: '2017-11-3'
+subtitle: Goodness of Fit
 ---
 
 # 0. Agenda
@@ -37,7 +37,7 @@ $$\mathcal{M}: \text{logit}^{-1}(\beta_{0} + \beta_{1}x_{1} + ...+\beta_{p}x_{p}
 
 $$\mathcal{M}':\text{logit}^{-1}(\beta_{0} + \beta_{1}x_{1} + ...+\beta_{p}x_{p}+\beta_{p+1}x_{p+1}+\beta_{p'}x_{p'})$$
 
-The likelihood ratio statistic tests the null hypothesis that the additional paramters are equal to zero:
+The likelihood ratio statistic tests the null hypothesis that the additional parameters are equal to zero:
 
 $$H_{0}: \beta_{p+1}=...=\beta_{p'}=0$$
 
@@ -176,7 +176,7 @@ The Akaike Information Criterion (AIC) is defined as follows:
 $$AIC(\mathcal{M}) = D(\mathcal{M})+2\times|\mathcal{M}|$$
 Or -2 times the log likelihood of the model at its maximum plus 2 times the number of parameters. 
 
-A model with a smaller AIC is preferred. This is because the first part, $D(\mathcal{M})$, will be lower as the likelihood increases, but it also always decreases as more variables are added to the model. The second part, $2\times|\mathcal{M}|$, always increases as more variables are added to the model, and thus penalizes the first part. Put together, the two parts create a balance between fit and complexity. 
+A model with a smaller AIC is preferred. Why? This is because the first part, $D(\mathcal{M})$, will be lower as the likelihood increases, but it also always decreases as more variables are added to the model. The second part, $2\times|\mathcal{M}|$, always increases as more variables are added to the model, and thus penalizes the first part. Put together, the two parts create a balance between fit and complexity. 
 
 # 2. Akaike Information Criterion
 
@@ -194,9 +194,39 @@ The Bayesian Information Criterion (BIC) is similar to the AIC but penalizes the
 
 $$BIC(\mathcal{M}) = D(\mathcal{M})+ \text{log}(n) \times|\mathcal{M}|$$
 
-Or -2 times the log likelihood of the model at its maximum multiplied by $\text{log}(n)$ times the number of parameters. Again, a model with a smaller BIC is preferred.
+Or -2 times the log likelihood of the model at its maximum multiplied by $\text{log}(n)$ times the number of parameters. In this case, the penalty considers the number of observations and the number of variables. 
 
 # 3. Bayesian Information Criterion
+
+The BIC is based on a Bayesian comparison of models proposed by Raftery (1996).
+
+Recall Bayes theorem:
+\begin{equation*}
+\begin{split}
+P(\boldsymbol{\theta}|\boldsymbol{y}) &= \frac{P(\boldsymbol{y}|\boldsymbol{\theta})P(\boldsymbol{\theta})}{P(\boldsymbol{y})}\\
+\Bigg[\frac{\text{P}(\mathcal{M}_{1}|\text{Observed Data})}{\text{P}(\mathcal{M}_{2}|(\text{Observed Data})} \Bigg] &\approx \Bigg[\frac{\text{P}(\text{Observed Data}|\mathcal{M}_{1})}{\text{P}(\text{Observed Data}|\mathcal{M}_{2})} \times \frac{\text{P}(\mathcal{M}_{1})}{\text{P}(\mathcal{M}_{2})}\Bigg]
+\end{split}
+\end{equation*}
+
+If we assume that $\frac{\text{P}(\mathcal{M}_{1})}{\text{P}(\mathcal{M}_{2})}=1$, Raftery shows that 
+
+$$2 \text{ln} \Bigg[\frac{\text{P}(\text{Observed Data}|\mathcal{M}_{1})}{\text{P}(\text{Observed Data}|\mathcal{M}_{2})} \Bigg] \approx \text{BIC}_{\mathcal{M}_2} - \text{BIC}_{\mathcal{M}_1}$$
+A model with a smaller BIC is again preferred.
+
+# 3. Bayesian Information Criterion
+
+Raftery's suggested guidelines for the strength of evidence favoring $\text{BIC}_{\mathcal{M}_1}$ over $\text{BIC}_{\mathcal{M}_2}$ are as follows:
+
+\begin{table}
+\begin{tabular}{l | r }
+Absolute Difference & Evidence \\
+\hline 
+0-2 & Weak \\ 
+2-6 & Positive \\
+6-10 & Strong \\
+>10 & Very Strong 
+\end{tabular}
+\end{table}
 
 ```{r}
 # Bayesian Information Criterion (BIC)
@@ -205,17 +235,16 @@ bic.m2 <- log(nrow(x2))*k.m2 - 2*ll.m2
 bic.test <- bic.m2 - bic.m1
 bic.test
 ```
-
 # 4.  Percent Correctly Predicted
 
 We can also observe the percentage of observations our model that correctly predicts, such that
 
 $$\hat{y}\geq0.5 \quad \text{and} \quad y=1$$
-\centering
+  \centering
 or 
 $$\hat{y}<0.5 \quad \text{and} \quad y=0$$
-\flushleft
-In other words, we check to see how often the predicted probability from our model is greater than or equal to 0.5 when the observed value is 1 and is less than 0.5 when the observed value is 0.
+  \flushleft
+In other words, we check to see how often the predicted probability from our model is greater than or equal to 0.5 when the observed value is 1 and how often it is less than 0.5 when the observed value is 0.
 
 # 4.  Percent Correctly Predicted
 \scriptsize
@@ -251,17 +280,20 @@ pcpi.m2
 #pre(glm.m1)
 ```
 
+
 # 5.  Separation Plots
 
 We can also visualize the PCP using separation plots.
 
-1. Sort the observations by predicted probability of the outcome
+1. Sort the observations by predicted probability of the outcome (smallest to largest)
 
-2. Plot the 1s as red lines and 0s as tan lines
+3. Plot 1s as red lines and 0s as tan lines
 
-3. Trace a horizontal black line as the predicted probability for each case
+4. Trace a horizontal black line as the predicted probability for each case
 
 Red lines to the left and tan lines to the right of where the horizontal line passes the half way point to the top are mispredictions.
+
+A model that accurately predicts will be tan on the left and red on the right.
 
 # 5.  Separation Plots
 \scriptsize
@@ -269,7 +301,6 @@ Red lines to the left and tan lines to the right of where the horizontal line pa
 # Separation plots
 separationplot(pred=glm.m1$fitted.values, actual=glm.m1$y)
 ```
-
 \centering
 \includegraphics{Sep1.pdf}
 
@@ -278,7 +309,6 @@ separationplot(pred=glm.m1$fitted.values, actual=glm.m1$y)
 ```{r}
 separationplot(pred=glm.m2$fitted.values, actual=glm.m2$y)
 ```
-
 \centering
 \includegraphics{Sep2.pdf}
 
@@ -286,11 +316,27 @@ separationplot(pred=glm.m2$fitted.values, actual=glm.m2$y)
 
 Alternatively, we can plot the average of the observed values against the predicted probabilities of the model for small intervals or bins.
 $\newline$
-
-For each bin or interval, the average of the predicted probabilities should match the average of the observed values (1s and 0s) if our model is performing well. 
+  
+  For each bin or interval, the average of the predicted probabilities should match the average of the observed values (1s and 0s) if our model is performing well. 
+$\newline$
+  
+\textbf{That is, for each bin we compare the avg predicted probability and avg empirical frequency.}
 $\newline$
 
 These will be plot along the $45^{\circ}$ line. When the average of the observed values is above (below) the $45^{\circ}$ line, the predicted probabilities over (under) predict. 
+
+# 6.  Actual vs Predicted Plots
+
+1. Sort the observations by predicted probability of the outcome (smallest to largest) $\newline$
+
+2. Bin the sorted data into ranges of predicted probabilities (spaced equally with a new bin every 1/nbin or with an equal number of observations with a new bin after every obs/nbin observations) $\newline$
+
+3. Compute the average predicted probability within each bin $\newline$
+
+4. Compute the average empirical frequency within each bin $\newline$
+
+5. Plot the average empirical frequency against the average predicted probability for each bin
+
 
 # 6.  Actual vs Predicted Plots
 \tiny
@@ -313,6 +359,9 @@ binnedM1 <- binPredict(glm.m1, col=blue, label="M1: Age, Edu", quantiles=TRUE)
 
 binnedM2 <- binPredict(glm.m2, col=orange, label="M2: Age, Edu, Married", quantiles=TRUE)
 ```
+
+
+
 
 # 6.  Actual vs Predicted Plots
 \tiny
@@ -352,9 +401,23 @@ plot(binnedM1, binnedM2, display="avp", hide=TRUE, labx=0.35)
 ```
 
 # 7.  Error vs Predicted Plots
-\tiny
+\scriptsize
 The EVP plot is similar to the AVP plot but uses the ratio of the actual to the predicted probabilities on the y-axis. 
 
+1. Sort the observations by predicted probability of the outcome (smallest to largest) $\newline$
+
+2. Bin the sorted data into ranges of predicted probabilities (spaced equally with a new bin every 1/nbin or with an equal number of observations with a new bin after every obs/nbin observations) $\newline$
+
+3. Compute the average predicted probability within each bin $\newline$
+
+4. Compute the average empirical frequency within each bin $\newline$
+
+5. Compute the ratio of the average empirical frequency to the average predicted probability for each bin $\newline$
+
+6. Plot the ratio of the average empirical frequency to the average predicted probability against the average predicted probability for each bin
+
+# 7.  Error vs Predicted Plots
+\tiny
 ```{r}
 
 # Send error vs predicted of M1 and M2 to file
@@ -366,11 +429,16 @@ plot(binnedM1, binnedM2, display="evp", hide=TRUE, labx=0.35)
 
 ROC plots allow us to observe the trade off between sensitivity (true positive rate) and specificity (true negative rate).
 
-1. Sort cases from highest probability of 1 to lowest
+1. Sort observations from highest predicted probability to lowest
 
 2. Start a line from the origin and 
 - move up $\frac{1}{\text{total positives}}$ for each positive case
 - move right $\frac{1}{\text{total negatives}}$ for each negative case
+
+Successful predictions of $y=1$ will move the curve up, unsuccessful predictions of $y=1$ will move the curve right. $\newline$
+
+A model that predicts accurately will have a large area under the curve.
+
 
 # 8.  ROC Plots
 \tiny
@@ -400,12 +468,14 @@ concordi.m1
 concordi.m2
 ```
 
+
+
 # 9. Residual vs Leverage Plots
 
 Another familiar technique is to observe any outliers within the data set. 
 $\newline$
-
-This is done by plotting each observation's leverage against its discrepancy, or the studentized residuals against the standardized hat-values.
+  
+  This is done by plotting each observation's leverage against its discrepancy, or the studentized residuals against the standardized hat-values.
 $\newline$
 
 Recall that studentized residuals greater than 2 and less than -2 are considered large, while standardized hat-values of greater than 2 or 3 are considered large.
@@ -438,7 +508,7 @@ axis(1, at=c(0,1,2,3,4,5,6,7,8,9,10))
 
 
 title(xlab="Standardized hat-values", 
-      ylab="Studentized residuals")
+ylab="Studentized residuals")
 
 points(hatscore.m1, rstu.m1,col = blue) 
 
@@ -469,7 +539,7 @@ axis(1,at=c(0,1,2,3,4,5,6,7,8,9,10))
 
 
 title(xlab="Standardized hat-values", 
-      ylab="Studentized residuals")
+ylab="Studentized residuals")
 
 points(hatscore.m2, rstu.m2, col=orange)
 
@@ -492,6 +562,7 @@ For cross-validation, we select an error metric: in this case, we use the percen
 In leave-on-out cross-validation, we remove each observation then find the rate at which the model correctly predicts the left out observation. $\newline$
 
 We can then compare the PCP across models.
+
 
 # 10. Cross-validation
 \tiny
@@ -523,16 +594,16 @@ cvPCP.m2
 
 ## A simple leave-one-out cross-validation function for logit glm; returns predicted probs
 loocv <- function (obj) {
-    data <- obj$data
-    m <- dim(data)[1]
-    form <- formula(obj)
-    fam <- obj$family$family
-    loo <- rep(NA, m)
-    for (i in 1:m) {
-        i.glm <- glm(form, data = data[-i, ], family = fam)
-        loo[i] <- predict(i.glm, newdata = data[i,], family = fam, type = "response")
-    }
-    loo
+data <- obj$data
+m <- dim(data)[1]
+form <- formula(obj)
+fam <- obj$family$family
+loo <- rep(NA, m)
+for (i in 1:m) {
+i.glm <- glm(form, data = data[-i, ], family = fam)
+loo[i] <- predict(i.glm, newdata = data[i,], family = fam, type = "response")
+}
+loo
 }
 
 # LOOCV for models 1 and 2
@@ -541,13 +612,13 @@ predCVm2 <- loocv(glm.m2)
 ```
 
 # 10. Cross-validation
-\scriptsize
+\tiny
 ```{r}
 # Make cross-validated AVP and ROC plots; note use of newpred input in binPredict
 binnedM1cv <- binPredict(glm.m1, newpred=predCVm1, col=blue, label="M1: LOO-CV", quantiles=TRUE)
 
 plot(binnedM1cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25)
+labx=0.25)
 ```
 
 # 10. Cross-validation
@@ -556,12 +627,12 @@ plot(binnedM1cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 
 binnedM2cv <- binPredict(glm.m2, newpred=predCVm2, col=orange, label="M2: LOO-CV", quantiles=TRUE)
 
 plot(binnedM2cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25)
+labx=0.25)
 ```
 
 # 10. Cross-validation
 \tiny
 ```{r}
 plot(binnedM1cv, binnedM2cv, display=c("avp","roc"), hide=TRUE, thresholds=c(0.9, 0.8, 0.7, 0.6),
-     labx=0.25)
+labx=0.25)
 ```

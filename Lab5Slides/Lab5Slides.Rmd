@@ -1,0 +1,53 @@
+---
+title: 'CSSS 510: Lab 5'
+output:
+  beamer_presentation
+date: '2017-11-10'
+subtitle: Ordered Probit
+---
+
+# 0. Agenda
+
+1. Deriving a likelihood function for the ordered probit model $\newline$
+
+2. Fitting an ordered probit model using optim() and glm() $\newline$
+
+3. Interpreting the results $\newline$
+
+4. Simulating predicted values and confidence intervals $\newline$
+
+5. Evaluating goodness of fit $\newline$
+
+
+# 1. Deriving a likelihood function for ordered probit
+
+Recall from lecture the ordered probit model:
+
+$$\text{Pr}(y_{i}=j|\boldsymbol{x}_{i})=\int^{\tau_{j}}_{\tau_{j-1}}\text{Normal}(\boldsymbol{x}_{i}\boldsymbol{\beta}, 1)\text{dx}_{i}\boldsymbol{\beta}$$ 
+
+$\newline$
+$\newline$
+How does this model differ from the others we've covered so far in the course?
+
+
+# 1. Deriving a likelihood function for ordered probit
+
+\centering
+\includegraphics{OP2.pdf}
+
+
+# 1. Deriving a likelihood function for ordered probit
+
+\centering
+\includegraphics{OP1.pdf}
+
+
+
+# 1. Deriving a likelihood function for ordered probit
+
+\centering
+\includegraphics{OP3.pdf}
+
+
+
+

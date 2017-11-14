@@ -1,0 +1,25 @@
+---
+title: 'CSSS 510: Lab 6'
+output:
+  beamer_presentation
+date: '2017-11-10'
+subtitle: Multinomial Logit
+---
+
+# 0. Agenda
+
+1. Deriving a likelihood function for the multinomial model $\newline$
+
+2. Fitting a multinomial logit model using optim() and glm() $\newline$
+
+3. Interpreting the results $\newline$
+
+4. Simulating predicted values and confidence intervals $\newline$
+
+5. Evaluating goodness of fit $\newline$
+
+
+# 1. Deriving a likelihood function for multinomial logit
+
+Recall from lecture the multinomial logit model:
+

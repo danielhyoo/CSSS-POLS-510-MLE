@@ -14,61 +14,121 @@ subtitle: Ordered Probit
 
 3. Interpreting the results $\newline$
 
-4. Simulating predicted values and confidence intervals $\newline$
-
-5. Evaluating goodness of fit $\newline$
-
+4. Simulating predicted values and confidence intervals 
 
 # 1. Deriving a likelihood function for ordered probit
 
 Recall from lecture the ordered probit model:
 
-$$\text{Pr}(y_{i}=j|\boldsymbol{x}_{i})=\int^{\tau_{j}}_{\tau_{j-1}}\text{Normal}(\boldsymbol{x}_{i}\boldsymbol{\beta}, 1)\text{dx}_{i}\boldsymbol{\beta}$$ 
+$$\text{Pr}(y_{i}=j|\boldsymbol{x}_{i})=\int^{\tau_{j}}_{\tau_{j-1}}\text{Normal}(\boldsymbol{x_i\beta}, 1)\text{dx}_{i}\boldsymbol{\beta}$$ 
 
 $\newline$
 $\newline$
-How does this model differ from the others we've covered so far in the course?
+How does this model differ from the others we've covered so far in the course? 
+
+We are saying that the probability that $y_i$ is in category $j$ is equal to the CDF of the standard normal distribution evaluated at $\boldsymbol{x_i\beta}$ between cutpoints $\tau_{j}$ and $\tau_{j-1}$
+
+# 1. Deriving a likelihood function for ordered probit
+
+\begin{columns}
+  \column{0.4\linewidth}
+
+If we merely plot the observed values of $y$ then we would obtain something like the following. $\newline$
+
+But, this runs into the same problems we found when using linear regression to fit a dichotomous outcome variable.
+
+\column{0.6\linewidth}
+\includegraphics[scale=0.7]{OP2.pdf}
+\end{columns}
+
+# 1. Deriving a likelihood function for ordered probit
+\small
+\begin{columns}
+  \column{0.4\linewidth}
+
+Instead, we refer back to the latent variable framework, which produces a similar relationship between our covariates and $y^*$ but now we have more than two categories. $\newline$
+
+In a four category model, we have the following:
+
+\column{0.6\linewidth}
+\includegraphics[scale=0.7]{OP1.pdf}
+\end{columns}
+
+\begin{equation*}
+  y_{i}=\begin{cases}
+    1 \Rightarrow \text{SD}, & \text{if $\tau_{0} = -\infty \leq y_{i}^*<\tau_{1}$}\\
+    2 \Rightarrow \text{D}, & \text{if $\tau_{1} \leq y_{i}^*<\tau_{2}$}\\
+    3 \Rightarrow \text{A}, & \text{if $\tau_{2} \leq y_{i}^*<\tau_{3}$}\\
+    4 \Rightarrow \text{SA}, & \text{if $\tau_{3} \leq y_{i}^*<\tau_{4}=\infty$}
+  \end{cases}
+\end{equation*}
+
+$$y^* = \boldsymbol{x_{i}\beta} + \epsilon$$
+
+
+# 1. Deriving a likelihood function for ordered probit
+\small
+\begin{columns}
+  \column{0.4\linewidth}
+
+Recall that in logit, we assume the errors of the latent variable follow a standard logistic distribution. $\newline$
+
+For probit and ordered probit, we assume the errors follow a standard normal distribution. $\newline$
+
+\column{0.6\linewidth}
+\includegraphics[scale=0.65]{OP3.pdf}
+\end{columns}
+
+\begin{equation*}
+\begin{split}
+\text{Pr}(y_{i}=1|\boldsymbol{x_i}) &= \text{Pr}(\tau_{0}\leq y^* < \tau_{1}|\boldsymbol{x_i})\\
+&= \text{Pr}(\tau_{0} \leq \boldsymbol{x_{i}\beta}+\epsilon_{i}<\tau_{1}|\boldsymbol{x_i})\\
+&= \text{Pr}(\tau_{0}-\boldsymbol{x_i\beta}\leq \epsilon_{i}<\tau_{1}-\boldsymbol{x_i\beta}|\boldsymbol{x_i})\\
+&= \text{Pr}(\epsilon_i < \tau_{1} - \boldsymbol{x_i\beta}|\boldsymbol{x_i})-\text{Pr}(\epsilon_i \leq \tau_{0} - \boldsymbol{x_i\beta}|\boldsymbol{x_i})\\
+&= F(\tau_{1}-\boldsymbol{x_i\beta})-F(\tau_{0}-\boldsymbol{x_i\beta})\\
+\text{Pr}(y_i=m|\boldsymbol{x_i})&=F(\tau_{m}-\boldsymbol{x_i\beta})-F(\tau_{m-1}-\boldsymbol{x_i\beta})
+\end{split}
+\end{equation*}
+
+
+# 1. Deriving a likelihood function for ordered probit
+\small
+\begin{columns}
+  \column{0.4\linewidth}
+For the ordered probit this becomes
+
+\column{0.6\linewidth}
+\includegraphics[scale=0.65]{OP3.pdf}
+\end{columns}
+
+\begin{equation*}
+\begin{split}
+\text{Pr}(y_i=1|\boldsymbol{x_i})&=\Phi(\tau_1-\alpha-\boldsymbol{x_i\beta})\\
+\text{Pr}(y_i=2|\boldsymbol{x_i})&=\Phi(\tau_2-\alpha-\boldsymbol{x_i\beta})-\Phi(\tau_{1}-\alpha-\boldsymbol{x_i\beta})\\
+\text{Pr}(y_i=3|\boldsymbol{x_i})&=\Phi(\tau_3-\alpha-\boldsymbol{x_i\beta})-\Phi(\tau_{2}-\alpha-\boldsymbol{x_i\beta})\\
+\text{Pr}(y_i=4|\boldsymbol{x_i})&=1-\Phi(\tau_3-\alpha-\boldsymbol{x_i\beta})
+\end{split}
+\end{equation*}
 
 
 # 1. Deriving a likelihood function for ordered probit
 
-\centering
-\includegraphics{OP2.pdf}
+To identify the model, we commonly make one of two assumptions:
 
+1. Assume that $\tau_{1}=0$. This is also the identifying assumption of logit and probit. optim() uses this.
 
-# 1. Deriving a likelihood function for ordered probit
+2. Assume that $\alpha=0$. polr() uses this.
 
-\centering
-\includegraphics{OP1.pdf}
+The likelihood function for ordered probit finds the $\boldsymbol{\beta}$ and $\tau$ that make the observed data most likely.
 
+$$\mathcal{L}(\boldsymbol{\beta,\tau|y})=\prod^{n}_{i=1}\Bigg\{\prod^{m}_{j=1}[\Phi(\tau_j|\boldsymbol{x_i\beta}],1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]^{y_{ij}} \Bigg\}$$
+$$\mathcal{L}(\boldsymbol{\beta, \tau|y})=\sum^n_{i=i}\sum^m_{j=1}y_{ij}\text{log}[\Phi(\tau_j|\boldsymbol{x_i\beta},1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]$$
 
-
-# 1. Deriving a likelihood function for ordered probit
-
-\centering
-\includegraphics{OP3.pdf}
-
+#2. Fitting an ordered probit model using optim() and glm()
+\scriptsize
 
 ```{r}
-## Code to estimate, interpret, and assess goodness of fit
-## for a four-category ordered probit using MLE and GLM
-## 
-## Christopher Adolph  faculty.washington.edu/cadolph
-## 3 November 2016
-##
-## Example data from 1977, 1989 GSS:  Attitudes towards working mothers
-## "A working mother can establish just as warm and secure of a relationship
-##  with her child as a mother who does not work." SD, D, A, SA
-##
-## Covariates: male respondent; white respondent; age of respondent;
-## years of education of respondent;
-## prestige of respondent's occupation (% considering prestigious)
-
-
 rm(list=ls())
-setwd("~/desktop")
-
-## Helper functions
 
 ## Likelihood for 4 category ordered probit
 llk.oprobit4 <- function(param, x, y) {
@@ -92,6 +152,13 @@ llk.oprobit4 <- function(param, x, y) {
   -sum(cbind(y==1,y==2,y==3,y==4) * cbind(p1,p2,p3,p4))
 }
 
+```
+
+
+#2. Fitting an ordered probit model using optim() and glm()
+\scriptsize
+
+```{r}
 ## Load libraries
 library(MASS)
 library(simcf)
@@ -112,9 +179,17 @@ workmom <- read.csv("ordwarm2.csv", header=TRUE, sep=",")
 workmom77 <- workmom[workmom$yr89==0, ]
 workmom89 <- workmom[workmom$yr89==1, ]
 
+```
+
+
+
+#2. Fitting an ordered probit model using optim() and glm()
+\scriptsize
+
+```{r}
 ## Data from 1977, 1989 GSS:  Attitudes towards working mothers
 y <- workmom77$warm    # Mother can have warm feelings towards child?  
-             
+
 x <- cbind(workmom77$male, workmom77$white, workmom77$age,
            workmom77$ed, workmom77$prst)
 ## male respondent; white resp; age of resp;
@@ -127,17 +202,34 @@ model <- warm ~ male + white + age + ed + prst
 # Use optim directly to get MLE
 ls.result <- lm(model, data=workmom77)   # use ls estimates as starting values
 stval <- c(coef(ls.result),1,2)          # initial guesses
-oprobit.res77 <- optim(stval, llk.oprobit4, method="BFGS", x=x, y=y, hessian=TRUE)
+oprobit.res77 <- optim(stval, llk.oprobit4, method="BFGS", x=x, y=y, hessian=T)
 pe77 <- oprobit.res77$par                # point estimates
 vc77 <- solve(oprobit.res77$hessian)     # var-cov matrix
 se77 <- sqrt(diag(vc77))                 # standard errors
 ll77 <- -oprobit.res77$value             # likelihood at maximum
+```
+
+
+
+#2. Fitting an ordered probit model using optim() and glm()
+\scriptsize
+
+```{r}
+pe77 
+se77 
+ll77 
+```
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 # Use MASS::polr to do ordered probit
 workmom77$warmf <- factor(workmom77$warm, labels=c("Strongly Disagree",
-                                              "Disagree",
-                                              "Agree",
-                                              "Strongly Agree"))
+                                                   "Disagree",
+                                                   "Agree",
+                                                   "Strongly Agree"))
 glm.res77 <- polr(warmf ~ male + white + age + ed + prst, data=workmom77,
                   method="probit", na.action=na.omit)
 
@@ -160,6 +252,12 @@ xhyp <- cfChange(xhyp, "white", x=0, xpre=1, scen=3)
 xhyp <- cfName(xhyp, "White", scen=4)
 xhyp <- cfChange(xhyp, "white", x=1, xpre=0, scen=4)
 
+```
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 xhyp <- cfName(xhyp, "Age + 1sd = 61", scen=5)
 xhyp <- cfChange(xhyp, "age",
                  x=mean(na.omit(workmom77$age))+sd(na.omit(workmom77$age)),
@@ -190,6 +288,12 @@ xhyp <- cfChange(xhyp, "prst",
                  xpre=mean(na.omit(workmom77$prst)),
                  scen=10)
 
+```
+
+#4. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
+
 # Simulate expected probabilities (all four categories)
 oprobit.ev77 <- oprobitsimev(xhyp, simbetas, cat=4)
 
@@ -203,6 +307,13 @@ oprobit.rr77 <- oprobitsimrr(xhyp, simbetas, cat=4)
 sorted <- order(oprobit.ev77$pe[,1])
 scenNames <- row.names(xhyp$x)
 
+```
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
+
 trace1 <- ropeladder(x = oprobit.ev77$pe[sorted,1],
                      lower = oprobit.ev77$lower[sorted,1],
                      upper = oprobit.ev77$upper[sorted,1],
@@ -211,7 +322,7 @@ trace1 <- ropeladder(x = oprobit.ev77$pe[sorted,1],
                      lex=1.5,
                      lineend="square",
                      plot=1
-                     )
+)
 
 trace2 <- ropeladder(x = oprobit.ev77$pe[sorted,2],
                      lower = oprobit.ev77$lower[sorted,2],
@@ -220,7 +331,7 @@ trace2 <- ropeladder(x = oprobit.ev77$pe[sorted,2],
                      lex=1.5,
                      lineend="square",
                      plot=2
-                     )
+)
 
 trace3 <- ropeladder(x = oprobit.ev77$pe[sorted,3],
                      lower = oprobit.ev77$lower[sorted,3],
@@ -229,7 +340,14 @@ trace3 <- ropeladder(x = oprobit.ev77$pe[sorted,3],
                      lex=1.5,
                      lineend="square",
                      plot=3
-                     )
+)
+
+```
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 trace4 <- ropeladder(x = oprobit.ev77$pe[sorted,4],
                      lower = oprobit.ev77$lower[sorted,4],
@@ -238,7 +356,7 @@ trace4 <- ropeladder(x = oprobit.ev77$pe[sorted,4],
                      lex=1.5,
                      lineend="square",
                      plot=4
-                     )
+)
 
 file <- "mothers4catEV"
 tile(trace1, trace2, trace3, trace4,
@@ -248,14 +366,21 @@ tile(trace1, trace2, trace3, trace4,
      xaxistitle=list(labels="probability"),
      topaxistitle=list(labels="probability"),
      plottitle=list(labels=c("Strongly Disagree", "Disagree",
-                        "Agree", "Strongly Agree")),
+                             "Agree", "Strongly Agree")),
      width=list(spacer=3),
      height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
      output=list(outfile=file, width=12)
-     )
+)
+
+```
 
 
-## Re-simulate, now collapsing presentation to two categories ("SD/D" vs "SA/A")
+#4. Simulating predicted values and confidence intervals 
+\scriptsize
+```{r}
+
+## Re-simulate, now collapsing presentation to two categories 
+## ("SD/D" vs "SA/A")
 
 ## Simulate expected probabilities (all four categories)
 oprobit.ev77c <- oprobitsimev(xhyp, simbetas, cat=4,
@@ -269,6 +394,14 @@ oprobit.fd77c <- oprobitsimfd(xhyp, simbetas, cat=4,
 oprobit.rr77c <- oprobitsimrr(xhyp, simbetas, cat=4,
                               recode=list(c(1,2), c(3,4)) )
 
+```
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
+
+
 ## Make a new rl plot, EV of Dd vs aA
 trace1b <- ropeladder(x = oprobit.ev77c$pe[sorted,1],
                       lower = oprobit.ev77c$lower[sorted,1],
@@ -278,7 +411,7 @@ trace1b <- ropeladder(x = oprobit.ev77c$pe[sorted,1],
                       lex=1.75,
                       lineend="square",
                       plot=1
-                      )
+)
 
 trace2b <- ropeladder(x = oprobit.ev77c$pe[sorted,2],
                       lower = oprobit.ev77c$lower[sorted,2],
@@ -287,7 +420,15 @@ trace2b <- ropeladder(x = oprobit.ev77c$pe[sorted,2],
                       lex=1.75,
                       lineend="square",
                       plot=2
-                      )
+)
+
+```
+
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 file <- "mothers2catEV"
 tile(trace1b, trace2b,
@@ -298,12 +439,11 @@ tile(trace1b, trace2b,
      xaxistitle=list(labels="probability"),
      topaxistitle=list(labels="probability"),
      plottitle=list(labels=c("Disagree or Str Disagree",
-                        "Agree or Str Agree")),
+                             "Agree or Str Agree")),
      width=list(spacer=3),
      height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
      output=list(outfile=file, width=7)
-     )
-
+)
 
 ## Revise traces and plot to show only "SA/A"
 trace2b$entryheight <- 0.2
@@ -321,13 +461,19 @@ tile(trace2b,
      width=list(plot=2.5),
      height = list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
      output=list(outfile=file, width=7)
-     )
+)
+
+```
 
 
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 ## Now estimate 1989 model
 y <- workmom89$warm    # Mother can have warm feelings towards child?  
-             
+
 x <- cbind(workmom89$male, workmom89$white, workmom89$age,
            workmom89$ed, workmom89$prst)
 
@@ -342,6 +488,12 @@ ll89 <- -oprobit.res89$value             # likelihood at maximum
 
 simbetas89 <- mvrnorm(sims, pe89, vc89)       # draw parameters, using MASS::mvrnorm
 
+```
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 # Create example counterfactuals -- for diffs
 xhyp <- cfMake(model, workmom77, nscen=5)
@@ -366,6 +518,13 @@ xhyp <- cfChange(xhyp, "prst",
                  x=mean(na.omit(workmom77$prst))+sd(na.omit(workmom77$prst)),
                  xpre=mean(na.omit(workmom77$prst)) - sd(na.omit(workmom77$prst)),
                  scen=5)
+
+```
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
+
 
 # Simulate expected probabilities (all four categories)
 oprobit.ev77 <- oprobitsimev(xhyp, simbetas, cat=4)
@@ -398,6 +557,11 @@ oprobit.fd89c <- oprobitsimfd(xhyp, simbetas89, cat=4,
 # Simulate relative risks (all four categories)
 oprobit.rr89c <- oprobitsimrr(xhyp, simbetas89, cat=4,
                               recode=list(c(1,2), c(3,4)) )
+```
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 
 # Make a new ropeladder plot, showing just change in probability of any agreement
@@ -415,7 +579,7 @@ trace1c <- ropeladder(x = oprobit.fd77c$pe[sortedc,2],
                       lex=1.75,
                       lineend="square",
                       plot=1
-                      )
+)
 
 trace2c <- ropeladder(x = oprobit.fd89c$pe[sortedc,2],
                       lower = oprobit.fd89c$lower[sortedc,2],
@@ -430,7 +594,13 @@ trace2c <- ropeladder(x = oprobit.fd89c$pe[sortedc,2],
                       entryheight=0.40,
                       subentryheight=.8,
                       plot=1
-                      )
+)
+
+```
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+```{r}
 
 sigMark1 <- oprobit.fd77c$pe[sortedc,2]
 is.na(sigMark1) <- (oprobit.fd77c$lower[sortedc,2]>0)
@@ -453,7 +623,7 @@ tile(trace1c, trace2c, vertmark, traceSig1, traceSig2,
      limits=c(-0.05,0.25),
      gridlines=list(type="xt"),
      topaxis=list(add=TRUE, at=seq(from=0, to=0.2, by=0.05),
-         labels=c("0%", "+5%", "+10%", "+15%", "+20%")),
+                  labels=c("0%", "+5%", "+10%", "+15%", "+20%")),
      xaxis=list(at=seq(from=0, to=0.2, by=0.05), labels=c("0%", "+5%", "+10%", "+15%", "+20%")),
      xaxistitle=list(labels="difference in probability agree or strongly agree"),
      topaxistitle=list(labels="difference in probability agree or strongly agree"),
@@ -461,14 +631,7 @@ tile(trace1c, trace2c, vertmark, traceSig1, traceSig2,
      width=list(plot=2),
      height=list(plottitle=3,xaxistitle=3.5,topaxistitle=3.5),
      output=list(outfile=file, width=6.75)
-     )
-
-
-## TO ADD -- GOODNESS OF FIT
+)
 
 ```
-
-
-
-
 

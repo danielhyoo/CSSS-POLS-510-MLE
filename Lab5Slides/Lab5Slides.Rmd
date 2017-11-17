@@ -121,8 +121,10 @@ To identify the model, we commonly make one of two assumptions:
 
 The likelihood function for ordered probit finds the $\boldsymbol{\beta}$ and $\tau$ that make the observed data most likely.
 
-$$\mathcal{L}(\boldsymbol{\beta,\tau|y})=\prod^{n}_{i=1}\Bigg\{\prod^{m}_{j=1}[\Phi(\tau_j|\boldsymbol{x_i\beta}],1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]^{y_{ij}} \Bigg\}$$
-$$\mathcal{L}(\boldsymbol{\beta, \tau|y})=\sum^n_{i=i}\sum^m_{j=1}y_{ij}\text{log}[\Phi(\tau_j|\boldsymbol{x_i\beta},1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]$$
+$$\mathcal{L}(\boldsymbol{\beta,\tau}|\textbf{y},\textbf{X})=\prod^{n}_{i=1}\Bigg\{\prod^{m}_{j=1}[\Phi(\tau_j|\boldsymbol{x_i\beta}],1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]^{y_{ij}} \Bigg\}$$
+$$\mathcal{L}(\boldsymbol{\beta, \tau}|\textbf{y},\textbf{ X})=\sum^n_{i=i}\sum^m_{j=1}y_{ij}\text{log}[\Phi(\tau_j|\boldsymbol{x_i\beta},1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]$$
+
+We estimate $\boldsymbol{\beta}$ and $\tau$ that maximizes the likelihood that $y_{ij}$ falls into category $j$. All other categories $\neq$ j are irrelevant.
 
 #2. Fitting an ordered probit model using optim() and glm()
 \scriptsize

@@ -2,7 +2,7 @@
 title: 'CSSS 510: Lab 6'
 output:
   beamer_presentation
-date: '2017-11-10'
+date: '2017-11-17'
 subtitle: Multinomial Logit
 ---
 
@@ -22,6 +22,7 @@ subtitle: Multinomial Logit
 Recall from lecture the multinomial logit model:
 
 $$\text{Pr}(y_{i}=j|\boldsymbol{x_{i}})=\frac{\text{exp}(\boldsymbol{x_i\beta_j})}{\sum^{M}_{l=1}\text{exp}(\boldsymbol{x_i\beta_l})}$$
+
 If we make the identifying assumption that $\boldsymbol{\beta_1}=0$, then we have $\newline$
 
 For $j=1$
@@ -31,19 +32,21 @@ $$\text{Pr}(y_{i}=j|\boldsymbol{x_i})=\frac{\text{exp}(\boldsymbol{x_i\beta_j})}
 
 # 1. Deriving a likelihood function for multinomial logit
 
+$$\text{Pr}(y_{i}=j|\boldsymbol{x_{i}})=\frac{\text{exp}(\boldsymbol{x_i\beta_j})}{\sum^{M}_{l=1}\text{exp}(\boldsymbol{x_i\beta_l})}$$
+
 In many ways, this is the most tractable model we've seen so far. 
 
 1. We assume that $\text{Pr}(y_i=j|x)$ is a function of the linear combination $\boldsymbol{x_i\beta_j}$. One key difference between this and previous models is that $\boldsymbol{\beta_j}$ differs for \emph{each outcome}. We therefore have a set of $\boldsymbol{\beta}$ for each outcome category.
 
 We then take two simple steps.
 
-2. We take the exponential of $\boldsymbol{x_i\beta_j}$ to ensure that the probabilities are nonnegative. (Why?)
+2. We take the exponential of $\boldsymbol{x_i\beta_j}$ to ensure that the probabilities are nonnegative. 
 
-3. We then divide each $\text{exp}(\boldsymbol{x_i\beta_j})$ and divide it by $\sum^{M}_{l=2}\text{exp}(\boldsymbol{x_i\beta_l})$ to make the probabilities sum to 1. (Why?)
+3. We then divide each $\text{exp}(\boldsymbol{x_i\beta_j})$ and divide it by $\sum^{M}_{l=2}\text{exp}(\boldsymbol{x_i\beta_l})$ to make the probabilities sum to 1. 
 
 # 1. Deriving a likelihood function for multinomial logit
 
-Our model looks very similar to logit but with more than 2 categories. Indeed, multinomial logit can be thought of as a way to estimate separate logits for all categories all at once. 
+Our model looks very similar to logit but with more than two categories. Indeed, multinomial logit can be thought of as a way to estimate separate logits for all categories all at once. 
 
 Like ordered probit, the likelihood function for multinomial logit finds the $\boldsymbol{\beta_j}$ that make the observed data most likely. That is, it maximizes the likelihood that $y_{ij}$ falls into category j. All other categories $\neq$ j are irrelevant. 
 
@@ -53,9 +56,9 @@ $$\mathcal{L}(\boldsymbol{\beta_2},...,\boldsymbol{\beta_{m}|\textbf{y, X}})=\su
 
 # 1. Deriving a likelihood function for multinomial logit
 
-Our coefficients can be interpreted in a similar way as logit coefficients: $\beta$ is the change in the log of the odds ratio of one outcome versus another outcome.
+Our coefficients can be interpreted in a similar way as logit coefficients: $\boldsymbol{\beta}$ is the change in the log of the odds of one outcome versus another outcome.
 
-Suppose that we have outcome $m$ and outcome $n$. We will then have a $\beta$ that corresponds to the change in the log of the odds of outcome $m$ versus outcome $n$.
+Suppose that we have outcome $m$ and outcome $n$. We will then have a $\boldsymbol{\beta}$ that corresponds to the change in the log of the odds of outcome $m$ versus outcome $n$.
 
 $$\text{log}\frac{\text{Pr}(y=m|\textbf{x}_c,\boldsymbol{\beta}_2,...,\boldsymbol{\beta}_M)}{\text{Pr}(y=n|\textbf{x}_c,\boldsymbol{\beta}_2,...,\boldsymbol{\beta}_M)}=\textbf{x}_c(\boldsymbol{\beta}_m-\boldsymbol{\beta}_n)$$
 
@@ -119,7 +122,6 @@ mlogit.result
 #2. Simulating predicted values and confidence intervals
 \scriptsize
 ```{r}
-
 
 # Simulate parameters from predictive distributions
 sims <- 10000
@@ -233,7 +235,7 @@ trace6a <- lineplot(x=xhyp1$x$size[xhyp1$x$female==1],
 
 #2. Simulating predicted values and confidence intervals
 \tiny
-```{r}
+```{r results='hide'}
 linelabels <- textTile(labels=c("Invertebrates",
                                 "Fish",
                                 "Other"),
@@ -244,8 +246,10 @@ linelabels <- textTile(labels=c("Invertebrates",
                        plot=c(1,2)
 )
 
+
 at.x <- c(1,2,3,4)
 at.y <- c(0,0.2,0.4,0.6,0.8,1)
+
 
 # Plot traces using tile
 file <- "gatorsEV"
@@ -267,6 +271,14 @@ tile(trace1a,
      gridlines = list(type="xy")
 )
 ```
+
+
+#2. Simulating predicted values and confidence intervals
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.6]{gatorsEV.pdf}
+\end{center}
 
 
 #2. Simulating predicted values and confidence intervals
@@ -366,7 +378,7 @@ trace6a <- lineplot(x=xhyp1$x$size[xhyp1$x$female==1],
 
 #2. Simulating predicted values and confidence intervals
 \tiny
-```{r}
+```{r results='hide'}
 # Plot traces using tile
 file <- "gatorsEVsep95"
 tile(trace1a,
@@ -390,6 +402,14 @@ tile(trace1a,
 )
 
 ```
+
+
+#2. Simulating predicted values and confidence intervals
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.4]{gatorsEVsep95.pdf}
+\end{center}
 
 
 #2. Simulating predicted values and confidence intervals
@@ -465,6 +485,13 @@ tile(traceFD, vertmarkFD,
 
 #2. Simulating predicted values and confidence intervals
 \tiny
+
+\begin{center}
+\includegraphics[scale=0.6]{gatorsFD.pdf}
+\end{center}
+
+#2. Simulating predicted values and confidence intervals
+\tiny
 ```{r}
 ########################################
 # Make ropeladder plot of Relative Risks
@@ -502,6 +529,13 @@ tile(traceRR, vertmarkRR,
 )
 ```
 
+
+#2. Simulating predicted values and confidence intervals
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.6]{gatorsRR.pdf}
+\end{center}
 
 #2. Simulating predicted values and confidence intervals
 \tiny
@@ -607,10 +641,17 @@ tile(traceRR2, vertmarkRR2,
 ```
 
 
-
 #2. Simulating predicted values and confidence intervals
 \tiny
-```{r}
+
+\begin{center}
+\includegraphics[scale=0.6]{gatorsRRmultiscen.pdf}
+\end{center}
+
+
+#2. Evaluating Goodness of Fit
+\tiny
+```{r results='hide'}
 #########################################
 ## A cross-validated goodness of fit test
 
@@ -639,7 +680,7 @@ pcpCV <- mean(predCVcat==gator$food)
 ```
 
 
-#2. Simulating predicted values and confidence intervals
+#2. Evaluating Goodness of Fit
 \tiny
 ```{r}
 pcpIS

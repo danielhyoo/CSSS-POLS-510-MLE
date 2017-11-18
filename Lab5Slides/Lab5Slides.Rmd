@@ -2,7 +2,7 @@
 title: 'CSSS 510: Lab 5'
 output:
   beamer_presentation
-date: '2017-11-10'
+date: '2017-11-17'
 subtitle: Ordered Probit
 ---
 
@@ -20,40 +20,63 @@ subtitle: Ordered Probit
 
 Recall from lecture the ordered probit model:
 
-$$\text{Pr}(y_{i}=j|\boldsymbol{x}_{i})=\int^{\tau_{j}}_{\tau_{j-1}}\text{Normal}(\boldsymbol{x_i\beta}, 1)\text{dx}_{i}\boldsymbol{\beta}$$ 
+$$\text{Pr}(y_{i}=j|\boldsymbol{x}_{i})=\int^{\tau_{j}}_{\tau_{j-1}}\text{Normal}(\boldsymbol{x_i\beta}, 1)\text{d}\boldsymbol{x_{i}\beta}$$ 
 
 $\newline$
 $\newline$
-How does this model differ from the others we've covered so far in the course? 
-
 We are saying that the probability that $y_i$ is in category $j$ is equal to the CDF of the standard normal distribution evaluated at $\boldsymbol{x_i\beta}$ between cutpoints $\tau_{j}$ and $\tau_{j-1}$
+
+How does this model differ from the others we've covered so far in the course? 
 
 # 1. Deriving a likelihood function for ordered probit
 
-\begin{columns}
-  \column{0.4\linewidth}
+\begin{center}
+\includegraphics[scale=0.9]{OP3.pdf}
+\end{center}
 
-If we merely plot the observed values of $y$ then we would obtain something like the following. $\newline$
-
-But, this runs into the same problems we found when using linear regression to fit a dichotomous outcome variable.
-
-\column{0.6\linewidth}
-\includegraphics[scale=0.7]{OP2.pdf}
-\end{columns}
 
 # 1. Deriving a likelihood function for ordered probit
 \small
 \begin{columns}
   \column{0.4\linewidth}
 
-Instead, we refer back to the latent variable framework, which produces a similar relationship between our covariates and $y^*$ but now we have more than two categories. $\newline$
+If we merely plot the observed values of $y$ then we would obtain something like the following. $\newline$
 
-In a four category model, we have the following:
+But, this runs into the same problems we found when using linear regression to fit a dichotomous outcome variable. $\newline$
+
+Furthermore, this includes the implicity assumption that the intervals between adjacent categories are equal. 
+
+\column{0.6\linewidth}
+\includegraphics[scale=0.7]{OP2.pdf}
+\end{columns}
+
+
+# 1. Deriving a likelihood function for ordered probit
+
+Instead, we refer back to the latent variable framework, which produces a similar relationship between our covariates and $y^*$ as in logit but now we have more than two categories. 
+
+$$y_i=j \quad \text{if} \quad \tau_{j-1}\leq y^{*}_{i} < \tau_{j} \quad \text{for} \quad j=1\; \text{to} \;M$$
+
+\begin{center}
+\includegraphics[scale=0.7]{LTV.pdf}
+\end{center}
+
+$\tau$ are thresholds or cutpoints. $y_i$ is the observed outcome variable. $m$ is the specific outcome observed. $y^{*}_{i}$ is the latent variable. $M$ is the number of categories.
+
+# 1. Deriving a likelihood function for ordered probit
+\small
+\begin{columns}
+  \column{0.4\linewidth}
+
+$$y^* = \boldsymbol{x_{i}\beta} + \epsilon$$
+$$y_i=j \quad \text{if} \quad \tau_{j-1}\leq y^{*}_{i} < \tau_{j}$$
+$$\text{for} \quad j=1\; \text{to} \;M$$
 
 \column{0.6\linewidth}
 \includegraphics[scale=0.7]{OP1.pdf}
 \end{columns}
 
+In a four category model, we have the following:
 \begin{equation*}
   y_{i}=\begin{cases}
     1 \Rightarrow \text{SD}, & \text{if $\tau_{0} = -\infty \leq y_{i}^*<\tau_{1}$}\\
@@ -62,8 +85,6 @@ In a four category model, we have the following:
     4 \Rightarrow \text{SA}, & \text{if $\tau_{3} \leq y_{i}^*<\tau_{4}=\infty$}
   \end{cases}
 \end{equation*}
-
-$$y^* = \boldsymbol{x_{i}\beta} + \epsilon$$
 
 
 # 1. Deriving a likelihood function for ordered probit
@@ -86,7 +107,7 @@ For probit and ordered probit, we assume the errors follow a standard normal dis
 &= \text{Pr}(\tau_{0}-\boldsymbol{x_i\beta}\leq \epsilon_{i}<\tau_{1}-\boldsymbol{x_i\beta}|\boldsymbol{x_i})\\
 &= \text{Pr}(\epsilon_i < \tau_{1} - \boldsymbol{x_i\beta}|\boldsymbol{x_i})-\text{Pr}(\epsilon_i \leq \tau_{0} - \boldsymbol{x_i\beta}|\boldsymbol{x_i})\\
 &= F(\tau_{1}-\boldsymbol{x_i\beta})-F(\tau_{0}-\boldsymbol{x_i\beta})\\
-\text{Pr}(y_i=m|\boldsymbol{x_i})&=F(\tau_{m}-\boldsymbol{x_i\beta})-F(\tau_{m-1}-\boldsymbol{x_i\beta})
+\text{Pr}(y_i=j|\boldsymbol{x_i})&=F(\tau_{j}-\boldsymbol{x_i\beta})-F(\tau_{j-1}-\boldsymbol{x_i\beta})
 \end{split}
 \end{equation*}
 
@@ -120,7 +141,6 @@ To identify the model, we commonly make one of two assumptions:
 2. Assume that $\alpha=0$. polr() uses this.
 
 The likelihood function for ordered probit finds the $\boldsymbol{\beta}$ and $\tau$ that make the observed data most likely.
-
 $$\mathcal{L}(\boldsymbol{\beta,\tau}|\textbf{y},\textbf{X})=\prod^{n}_{i=1}\Bigg\{\prod^{m}_{j=1}[\Phi(\tau_j|\boldsymbol{x_i\beta}],1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]^{y_{ij}} \Bigg\}$$
 $$\mathcal{L}(\boldsymbol{\beta, \tau}|\textbf{y},\textbf{ X})=\sum^n_{i=i}\sum^m_{j=1}y_{ij}\text{log}[\Phi(\tau_j|\boldsymbol{x_i\beta},1)-\Phi(\tau_{j-1}|\boldsymbol{x_i\beta},1)]$$
 
@@ -378,6 +398,14 @@ tile(trace1, trace2, trace3, trace4,
 
 
 #4. Simulating predicted values and confidence intervals 
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.35]{mothers4catEV.pdf}
+\end{center}
+
+
+#4. Simulating predicted values and confidence intervals 
 \scriptsize
 ```{r}
 
@@ -427,7 +455,6 @@ trace2b <- ropeladder(x = oprobit.ev77c$pe[sorted,2],
 ```
 
 
-
 #4. Simulating predicted values and confidence intervals 
 \tiny
 ```{r}
@@ -467,6 +494,21 @@ tile(trace2b,
 
 ```
 
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.5]{mothers2catEV.pdf}
+\end{center}
+
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.5]{mothers1catEV.pdf}
+\end{center}
 
 
 #4. Simulating predicted values and confidence intervals 
@@ -637,3 +679,10 @@ tile(trace1c, trace2c, vertmark, traceSig1, traceSig2,
 
 ```
 
+
+#4. Simulating predicted values and confidence intervals 
+\tiny
+
+\begin{center}
+\includegraphics[scale=0.5]{mothersFD7789.pdf}
+\end{center}
